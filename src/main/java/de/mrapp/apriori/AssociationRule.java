@@ -22,18 +22,16 @@ import java.util.Iterator;
 import static de.mrapp.util.Condition.*;
 
 /**
- * An association rule of the form X -&gt; Y, which consists of a body X and a head Y. Both, the
- * body and the head of an association rule consist of one or several items. These item sets must be
- * distinct. An association rule specifies, that if the items, which are contained by its body,
- * occur in a transaction, the items, which are given in its head, do also occur with a certain
- * probability.
+ * An association rule of the form X -&gt; Y, which consists of a body X and a head Y. Both, the body and the head of an
+ * association rule consist of one or several items. These item sets must be distinct. An association rule specifies,
+ * that if the items, which are contained by its body, occur in a transaction, the items, which are given in its head,
+ * do also occur with a certain probability.
  *
  * @param <ItemType> The type of the items, the association rule's body and head consist of
  * @author Michael Rapp
  * @since 1.0.0
  */
-public class AssociationRule<ItemType extends Item> implements Comparable<AssociationRule>,
-        Serializable, Cloneable {
+public class AssociationRule<ItemType extends Item> implements Comparable<AssociationRule>, Serializable, Cloneable {
 
     /**
      * The constant serial version UID.
@@ -58,16 +56,14 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     /**
      * Creates a new association rule.
      *
-     * @param body    An item set, which contains the items, which are contained by the association
-     *                rule's body, as an instance of the class {@link ItemSet}. The item set may not
-     *                be null
-     * @param head    An item set, which contains the items, which are contained by the association
-     *                rule's head, as an instance of the class {@link ItemSet}. The item set may no
-     * @param support The support of the association rule as a {@link Double} value. The support
-     *                must be at least 0 and at maximum 1
+     * @param body    An item set, which contains the items, which are contained by the association rule's body, as an
+     *                instance of the class {@link ItemSet}. The item set may not be null
+     * @param head    An item set, which contains the items, which are contained by the association rule's head, as an
+     *                instance of the class {@link ItemSet}. The item set may no
+     * @param support The support of the association rule as a {@link Double} value. The support must be at least 0 and
+     *                at maximum 1
      */
-    public AssociationRule(@NotNull final ItemSet<ItemType> body,
-                           @NotNull final ItemSet<ItemType> head,
+    public AssociationRule(@NotNull final ItemSet<ItemType> body, @NotNull final ItemSet<ItemType> head,
                            final double support) {
         ensureNotNull(body, "The body may not be null");
         ensureNotNull(head, "The head may not be null");
@@ -81,8 +77,8 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     /**
      * Returns the body of the association rule.
      *
-     * @return An item set, which contains the items, which are contained by the association rule's
-     * body, as an instance of the class {@link ItemSet}. The item set may not be null
+     * @return An item set, which contains the items, which are contained by the association rule's body, as an instance
+     * of the class {@link ItemSet}. The item set may not be null
      */
     @NotNull
     public final ItemSet<ItemType> getBody() {
@@ -92,9 +88,8 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     /**
      * Returns the head of the association rule.
      *
-     * @return An item set, which contains the items, which are contained by the association rule's
-     * head, as an instance of the class {@link ItemSet}. The item set may neither be null nor
-     * empty
+     * @return An item set, which contains the items, which are contained by the association rule's head, as an instance
+     * of the class {@link ItemSet}. The item set may neither be null nor empty
      */
     @NotNull
     public final ItemSet<ItemType> getHead() {
@@ -104,20 +99,20 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     /**
      * Returns the support of the association rule.
      *
-     * @return The support of the association rule as a {@link Double} value. The support must be at
-     * least 0 and at maximum 1
+     * @return The support of the association rule as a {@link Double} value. The support must be at least 0 and at
+     * maximum 1
      */
     public final double getSupport() {
         return support;
     }
 
     /**
-     * Returns, whether the association rule covers several items, i.e. that all of the items, which
-     * are contained in its body are contained by given items as well.
+     * Returns, whether the association rule covers several items, i.e. that all of the items, which are contained in
+     * its body are contained by given items as well.
      *
      * @param <T>   The type of the items, which should be checked
-     * @param items An array, which contains the items, which should be checked, as an array of the
-     *              generic type T. The array may not be null
+     * @param items An array, which contains the items, which should be checked, as an array of the generic type T. The
+     *              array may not be null
      * @return True, if the association rule covers the given items, false otherwise
      */
     @SafeVarargs
@@ -127,11 +122,11 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     }
 
     /**
-     * Returns, whether the association rule covers several items, i.e. that all of the items, which
-     * are contained in its body are contained by given items as well.
+     * Returns, whether the association rule covers several items, i.e. that all of the items, which are contained in
+     * its body are contained by given items as well.
      *
-     * @param items An iterable, which allows to iterate the items, which should be checked, as an
-     *              instance of the type {@link Iterable}. The iterable may not be null
+     * @param items An iterable, which allows to iterate the items, which should be checked, as an instance of the type
+     *              {@link Iterable}. The iterable may not be null
      * @return True, if the association rule covers the given items, false otherwise
      */
     public final boolean covers(@NotNull final Iterable<? extends ItemType> items) {
@@ -140,11 +135,11 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     }
 
     /**
-     * Returns, whether the association rule covers several items, i.e. that all of the items, which
-     * are contained in its body are contained by given items as well.
+     * Returns, whether the association rule covers several items, i.e. that all of the items, which are contained in
+     * its body are contained by given items as well.
      *
-     * @param iterator An iterator, which allows to iterate the items, which should be checked, as
-     *                 an instance of the type {@link Iterator}. The iterator may not be null
+     * @param iterator An iterator, which allows to iterate the items, which should be checked, as an instance of the
+     *                 type {@link Iterator}. The iterator may not be null
      * @return True, if the association rule covers the given items, false otherwise
      */
     public final boolean covers(@NotNull final Iterator<? extends ItemType> iterator) {
@@ -174,26 +169,28 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     }
 
     @Override
-    public final AssociationRule<ItemType> clone() {
+    public AssociationRule<ItemType> clone() {
         return new AssociationRule<>(body.clone(), head.clone(), support);
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return body.toString() + " -> " + head.toString();
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + body.hashCode();
         result = prime * result + head.hashCode();
+        long supportLong = Double.doubleToLongBits(support);
+        result = prime * result + (int) (supportLong ^ (supportLong >>> 32));
         return result;
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -201,7 +198,7 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
         if (getClass() != obj.getClass())
             return false;
         AssociationRule other = (AssociationRule) obj;
-        return body.equals(other.body) && head.equals(other.head);
+        return body.equals(other.body) && head.equals(other.head) && support == other.support;
     }
 
 }
