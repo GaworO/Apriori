@@ -36,8 +36,8 @@ import static org.junit.Assert.*;
 public class RuleSetTest {
 
     /**
-     * Tests, if all class members are initialized correctly by the constructor, which expects a
-     * comparator as a parameter.
+     * Tests, if all class members are initialized correctly by the constructor, which expects a comparator as a
+     * parameter.
      */
     @Test
     public final void testConstructorWithComparatorParameter() {
@@ -49,8 +49,8 @@ public class RuleSetTest {
     }
 
     /**
-     * Tests, if all class members are initialized correctly by the constructor, which excepts a
-     * collection and a comparator as parameters.
+     * Tests, if all class members are initialized correctly by the constructor, which excepts a collection and a
+     * comparator as parameters.
      */
     @Test
     public final void testConstructorWithCollectionAndComparatorParameters() {
@@ -58,12 +58,12 @@ public class RuleSetTest {
         body1.add(new NamedItem("a"));
         ItemSet<NamedItem> head1 = new ItemSet<>();
         head1.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.5);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.5, null);
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("c"));
         ItemSet<NamedItem> head2 = new ItemSet<>();
         head2.add(new NamedItem("d"));
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.5);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.5, null);
         Collection<AssociationRule<NamedItem>> collection = new LinkedList<>();
         collection.add(associationRule1);
         collection.add(associationRule2);
@@ -76,8 +76,8 @@ public class RuleSetTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects
-     * a collection and a comparator as parameters, if the collection is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects a collection and a
+     * comparator as parameters, if the collection is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testConstructorWithCollectionAndComparatorParametersThrowsException() {
@@ -95,10 +95,8 @@ public class RuleSetTest {
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("b"));
         body2.setSupport(0.7);
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, new ItemSet<>(),
-                0.5);
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, new ItemSet<>(),
-                0.5);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, new ItemSet<>(), 0.5, null);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, new ItemSet<>(), 0.5, null);
         RuleSet<NamedItem> ruleSet = new RuleSet<>(Sorting.forAssociationRules());
         ruleSet.add(associationRule1);
         ruleSet.add(associationRule2);
@@ -121,25 +119,22 @@ public class RuleSetTest {
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("b"));
         body2.setSupport(0.7);
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, new ItemSet<>(),
-                0.4);
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, new ItemSet<>(),
-                0.5);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, new ItemSet<>(), 0.4, null);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, new ItemSet<>(), 0.5, null);
         RuleSet<NamedItem> ruleSet = new RuleSet<>(Sorting.forAssociationRules());
         ruleSet.add(associationRule1);
         ruleSet.add(associationRule2);
         assertEquals(associationRule1, ruleSet.first());
         assertEquals(associationRule2, ruleSet.last());
-        Filter<AssociationRule> filter = Filter.forAssociationRules()
-                .byOperator(new Support(), 0.5);
+        Filter<AssociationRule> filter = Filter.forAssociationRules().byOperator(new Support(), 0.5);
         RuleSet<NamedItem> filteredRuleSet = ruleSet.filter(filter);
         assertEquals(1, filteredRuleSet.size());
         assertEquals(associationRule2, filteredRuleSet.first());
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * filter the rules of a rule set, if the given predicate is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to filter the rules of a
+     * rule set, if the given predicate is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterThrowsExceptionIfPredicateIsNull() {
@@ -156,13 +151,13 @@ public class RuleSetTest {
         body1.setSupport(0.5);
         ItemSet<NamedItem> head1 = new ItemSet<>();
         head1.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.5);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.5, null);
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("c"));
         body2.setSupport(0.6);
         ItemSet<NamedItem> head2 = new ItemSet<>();
         head2.add(new NamedItem("d"));
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.5);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.5, null);
         RuleSet<NamedItem> ruleSet1 = new RuleSet<>(Sorting.forAssociationRules());
         ruleSet1.add(associationRule1);
         ruleSet1.add(associationRule2);
@@ -183,27 +178,23 @@ public class RuleSetTest {
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("b"));
         body2.setSupport(0.8);
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, new ItemSet<>(),
-                0.5);
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, new ItemSet<>(),
-                0.7);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, new ItemSet<>(), 0.5, null);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, new ItemSet<>(), 0.7, null);
         RuleSet<NamedItem> ruleSet = new RuleSet<>(Sorting.forAssociationRules());
         ruleSet.add(associationRule1);
         ruleSet.add(associationRule2);
         DecimalFormat decimalFormat = new DecimalFormat();
         decimalFormat.setMinimumFractionDigits(1);
         decimalFormat.setMaximumFractionDigits(2);
-        assertEquals("[" + associationRule1.toString() + " (support = " +
-                        decimalFormat.format(new Support().evaluate(associationRule1)) + ", confidence = " +
-                        decimalFormat.format(new Confidence().evaluate(associationRule1)) + ", lift = " +
-                        decimalFormat.format(new Lift().evaluate(associationRule1)) + ", leverage = " +
-                        decimalFormat.format(new Leverage().evaluate(associationRule1)) + "),\n"
-                        + associationRule2.toString() + " (support = " +
-                        decimalFormat.format(new Support().evaluate(associationRule2)) + ", confidence = " +
-                        decimalFormat.format(new Confidence().evaluate(associationRule2)) + ", lift = " +
-                        decimalFormat.format(new Lift().evaluate(associationRule2)) + ", leverage = " +
-                        decimalFormat.format(new Leverage().evaluate(associationRule2)) + ")]",
-                ruleSet.toString());
+        assertEquals("[" + associationRule1.toString() + " (support = " + decimalFormat.format(
+                new Support().evaluate(associationRule1)) + ", confidence = " + decimalFormat.format(
+                new Confidence().evaluate(associationRule1)) + ", lift = " + decimalFormat.format(
+                new Lift().evaluate(associationRule1)) + ", leverage = " + decimalFormat.format(new Leverage().evaluate(
+                associationRule1)) + "),\n" + associationRule2.toString() + " (support = " + decimalFormat.format(
+                new Support().evaluate(associationRule2)) + ", confidence = " + decimalFormat.format(
+                new Confidence().evaluate(associationRule2)) + ", lift = " + decimalFormat.format(
+                new Lift().evaluate(associationRule2)) + ", leverage = " + decimalFormat.format(
+                new Leverage().evaluate(associationRule2)) + ")]", ruleSet.toString());
     }
 
     /**

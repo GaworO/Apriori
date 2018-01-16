@@ -40,8 +40,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the item set is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the item set is
+     * null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterThrowsExceptionIfItemSetIsNull() {
@@ -67,8 +67,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the minimum support is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the minimum support
+     * is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForItemSetsThrowsExceptionIfMinimumSupportIsLessThanZero() {
@@ -76,8 +76,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the minimum support is greater than 1.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the minimum support
+     * is greater than 1.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForItemSetsThrowsExceptionIfMinimumSupportIsGreaterThanOne() {
@@ -85,8 +85,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the maximum support is greater than 1.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the maximum support
+     * is greater than 1.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForItemSetsThrowsExceptionIfMaximumSupportIsGreaterThanOne() {
@@ -94,8 +94,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the maximum support is less than the minimum support.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the maximum support
+     * is less than the minimum support.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForItemSetsThrowsExceptionIfMaximumSupportIsLessThanMinimumSupport() {
@@ -119,8 +119,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the minimum size is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the minimum size is
+     * less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForItemSetsThrowsExceptionIfMinimumSizeIsLessThanZero() {
@@ -128,8 +128,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if
-     * the maximum size is less than the minimum size.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for item sets, if the maximum size is
+     * less than the minimum size.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForItemSetsThrowsExceptionIfMaximumSizeIsLessThanMinimumSize() {
@@ -145,14 +145,14 @@ public class FilterTest {
         body.add(new NamedItem("a"));
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("c"));
-        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5);
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
         Filter<AssociationRule> filter = Filter.forAssociationRules();
         assertTrue(filter.test(associationRule));
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the association rule is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the
+     * association rule is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterThrowsExceptionIfAssociationRuleIsNull() {
@@ -168,19 +168,18 @@ public class FilterTest {
         body.add(new NamedItem("a"));
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5);
-        Filter<AssociationRule> filter = Filter.forAssociationRules()
-                .byOperator(new Support(), 0.4, 0.6);
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
+        Filter<AssociationRule> filter = Filter.forAssociationRules().byOperator(new Support(), 0.4, 0.6);
         assertTrue(filter.test(associationRule));
-        associationRule = new AssociationRule<>(body, head, 0.3);
+        associationRule = new AssociationRule<>(body, head, 0.3, null);
         assertFalse(filter.test(associationRule));
-        associationRule = new AssociationRule<>(body, head, 0.7);
+        associationRule = new AssociationRule<>(body, head, 0.7, null);
         assertFalse(filter.test(associationRule));
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the operator is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the operator
+     * is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfOperatorIsNull() {
@@ -188,8 +187,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the minimum performance is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the minimum
+     * performance is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMinimumPerformanceIsLessThanZero() {
@@ -197,8 +196,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the maximum performance is less than the minimum performance.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the maximum
+     * performance is less than the minimum performance.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMaximumPerformanceIsLessThanMinimumPerformance() {
@@ -214,7 +213,7 @@ public class FilterTest {
         body.add(new NamedItem("a"));
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5);
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
         Filter<AssociationRule> filter = Filter.forAssociationRules().bySize(3, 3);
         assertFalse(filter.test(associationRule));
         body.add(new NamedItem("c"));
@@ -224,8 +223,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the minimum size is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the minimum
+     * size is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMinimumSizeIsLessThanZero() {
@@ -233,8 +232,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the maximum size is less than the minimum size.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the maximum
+     * size is less than the minimum size.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMaximumSizeIsLessThanMinimumSize() {
@@ -250,7 +249,7 @@ public class FilterTest {
         body.add(new NamedItem("a"));
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5);
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
         Filter<AssociationRule> filter = Filter.forAssociationRules().byBodySize(2, 2);
         assertFalse(filter.test(associationRule));
         body.add(new NamedItem("c"));
@@ -260,8 +259,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the minimum body size is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the minimum
+     * body size is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMinimumBodySizeIsLessThanZero() {
@@ -269,8 +268,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the maximum body size is less than the minimum size.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the maximum
+     * body size is less than the minimum size.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMaximumBodySizeIsLessThanMinimumBodySize() {
@@ -286,7 +285,7 @@ public class FilterTest {
         body.add(new NamedItem("a"));
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5);
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
         Filter<AssociationRule> filter = Filter.forAssociationRules().byHeadSize(2, 2);
         assertFalse(filter.test(associationRule));
         head.add(new NamedItem("c"));
@@ -296,8 +295,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the minimum head size is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the minimum
+     * head size is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMinimumHeadSizeIsLessThanZero() {
@@ -305,8 +304,8 @@ public class FilterTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association
-     * rules, if the maximum head size is less than the minimum size.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the filter for association rules, if the maximum
+     * head size is less than the minimum size.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testFilterForAssociationRulesThrowsExceptionIfMaximumHeadSizeIsLessThanMinimumHeadSize() {

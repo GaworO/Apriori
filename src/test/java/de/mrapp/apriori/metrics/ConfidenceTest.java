@@ -39,7 +39,7 @@ public class ConfidenceTest {
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
         double support = 0.5;
-        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, support);
+        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, support, null);
         assertEquals(support / bodySupport, new Confidence().evaluate(rule), 0);
     }
 
@@ -52,13 +52,13 @@ public class ConfidenceTest {
         body.add(new NamedItem("a"));
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
-        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, 0.5);
+        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, 0.5, null);
         assertEquals(0, new Confidence().evaluate(rule), 0);
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the evaluate-method, when
-     * passing null as a parameter.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the evaluate-method, when passing null as a
+     * parameter.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testEvaluateThrowsException() {

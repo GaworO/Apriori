@@ -47,8 +47,7 @@ public class SortingTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the sorting for item sets, if
-     * the order is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the sorting for item sets, if the order is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testSortingForItemSetsThrowsExceptionIfOrderIsNull() {
@@ -78,18 +77,18 @@ public class SortingTest {
         body1.setSupport(0.5);
         ItemSet<NamedItem> head1 = new ItemSet<>();
         head1.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25, null);
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("c"));
         body2.setSupport(0.5);
         ItemSet<NamedItem> head2 = new ItemSet<>();
         head2.add(new NamedItem("d"));
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25, null);
         Sorting<AssociationRule> sorting = Sorting.forAssociationRules();
         assertEquals(0, sorting.compare(associationRule1, associationRule2));
-        associationRule1 = new AssociationRule<>(body1, head1, 0.5);
+        associationRule1 = new AssociationRule<>(body1, head1, 0.5, null);
         assertEquals(-1, sorting.compare(associationRule1, associationRule2));
-        associationRule1 = new AssociationRule<>(body1, head1, 0.1);
+        associationRule1 = new AssociationRule<>(body1, head1, 0.1, null);
         assertEquals(1, sorting.compare(associationRule1, associationRule2));
     }
 
@@ -103,25 +102,24 @@ public class SortingTest {
         body1.setSupport(0.5);
         ItemSet<NamedItem> head1 = new ItemSet<>();
         head1.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25, null);
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("c"));
         body2.setSupport(0.5);
         ItemSet<NamedItem> head2 = new ItemSet<>();
         head2.add(new NamedItem("d"));
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25);
-        Sorting<AssociationRule> sorting = Sorting.forAssociationRules().withOrder(
-                Sorting.Order.ASCENDING);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25, null);
+        Sorting<AssociationRule> sorting = Sorting.forAssociationRules().withOrder(Sorting.Order.ASCENDING);
         assertEquals(0, sorting.compare(associationRule1, associationRule2));
-        associationRule1 = new AssociationRule<>(body1, head1, 0.5);
+        associationRule1 = new AssociationRule<>(body1, head1, 0.5, null);
         assertEquals(1, sorting.compare(associationRule1, associationRule2));
-        associationRule1 = new AssociationRule<>(body1, head1, 0.1);
+        associationRule1 = new AssociationRule<>(body1, head1, 0.1, null);
         assertEquals(-1, sorting.compare(associationRule1, associationRule2));
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the sorting for association
-     * rules, if the order is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the sorting for association rules, if the order is
+     * null.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testSortingForAssociationRulesThrowsExceptionIfOrderIsNull() {
@@ -138,15 +136,14 @@ public class SortingTest {
         body1.setSupport(0.5);
         ItemSet<NamedItem> head1 = new ItemSet<>();
         head1.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25, null);
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("c"));
         body2.setSupport(0.5);
         ItemSet<NamedItem> head2 = new ItemSet<>();
         head2.add(new NamedItem("d"));
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25);
-        Sorting<AssociationRule> sorting = Sorting.forAssociationRules()
-                .withTieBreaking((o1, o2) -> 1);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25, null);
+        Sorting<AssociationRule> sorting = Sorting.forAssociationRules().withTieBreaking((o1, o2) -> 1);
         assertEquals(-1, sorting.compare(associationRule1, associationRule2));
     }
 
@@ -160,18 +157,18 @@ public class SortingTest {
         body1.setSupport(0.5);
         ItemSet<NamedItem> head1 = new ItemSet<>();
         head1.add(new NamedItem("b"));
-        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25);
+        AssociationRule<NamedItem> associationRule1 = new AssociationRule<>(body1, head1, 0.25, null);
         ItemSet<NamedItem> body2 = new ItemSet<>();
         body2.add(new NamedItem("c"));
         body2.setSupport(0.5);
         ItemSet<NamedItem> head2 = new ItemSet<>();
         head2.add(new NamedItem("d"));
-        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25);
+        AssociationRule<NamedItem> associationRule2 = new AssociationRule<>(body2, head2, 0.25, null);
         Sorting<AssociationRule> sorting = Sorting.forAssociationRules().byOperator(new Support());
         assertEquals(0, sorting.compare(associationRule1, associationRule2));
-        associationRule1 = new AssociationRule<>(body1, head1, 0.5);
+        associationRule1 = new AssociationRule<>(body1, head1, 0.5, null);
         assertEquals(-1, sorting.compare(associationRule1, associationRule2));
-        associationRule1 = new AssociationRule<>(body1, head1, 0.1);
+        associationRule1 = new AssociationRule<>(body1, head1, 0.1, null);
         assertEquals(1, sorting.compare(associationRule1, associationRule2));
     }
 

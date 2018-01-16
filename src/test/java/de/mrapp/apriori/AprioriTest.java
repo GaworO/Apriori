@@ -38,8 +38,8 @@ import static org.mockito.Mockito.when;
 public class AprioriTest extends AbstractDataTest {
 
     /**
-     * Tests, if all class members are set correctly by the default constructor of the inner class
-     * {@link Configuration}.
+     * Tests, if all class members are set correctly by the default constructor of the inner class {@link
+     * Configuration}.
      */
     @Test
     public final void testConfigurationDefaultConstructor() {
@@ -56,8 +56,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the minimum support, if the support is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the minimum
+     * support, if the support is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMinSupportThrowsExceptionWhenSupportIsLessThanZero() {
@@ -65,8 +65,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the minimum support, if the support is greater than the maximum support.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the minimum
+     * support, if the support is greater than the maximum support.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMinSupportThrowsExceptionWhenSupportIsGreaterThanMaxSupport() {
@@ -76,8 +76,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the maximum support, if the support is greater than 1
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the maximum
+     * support, if the support is greater than 1
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMaxSupportThrowsExceptionWhenSupportIsGreaterThanOne() {
@@ -85,8 +85,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the maximum support, if the support is less than the minimum support.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the maximum
+     * support, if the support is less than the minimum support.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMaxSupportThrowsExceptionWhenSupportIsLessThanMinSupport() {
@@ -95,8 +95,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the support delta, if the delta is not greater than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the support delta,
+     * if the delta is not greater than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetSupportDeltaThrowsExceptionWhenDeltaIsNotGreaterThanOne() {
@@ -104,8 +104,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the frequent item set count, if the count is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the frequent item
+     * set count, if the count is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetFrequentItemSetCountThrowsExceptionWhenCountIsLessThanZero() {
@@ -113,8 +113,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the minimum confidence, if the confidence is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the minimum
+     * confidence, if the confidence is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMinConfidenceThrowsExceptionWhenConfidenceIsLessThanZero() {
@@ -122,8 +122,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the minimum confidence, if the confidence is greater than the maximum confidence.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the minimum
+     * confidence, if the confidence is greater than the maximum confidence.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMinConfidenceThrowsExceptionWhenConfidenceIsGreaterThanMaxConfidence() {
@@ -133,8 +133,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the maximum confidence, if the confidence is greater than 1.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the maximum
+     * confidence, if the confidence is greater than 1.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMaxConfidenceThrowsExceptionWhenConfidenceIsGreaterThanOne() {
@@ -142,8 +142,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the maximum confidence, if the confidence is less than the minimum confidence.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the maximum
+     * confidence, if the confidence is less than the minimum confidence.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetMaxConfidenceThrowsExceptionWhenConfidenceIsLessThanMinConfidence() {
@@ -152,8 +152,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the confidence delta, if the delta is not greater than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the confidence
+     * delta, if the delta is not greater than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetConfidenceDeltaThrowsExceptionWhenDeltaIsNotGreaterThanZero() {
@@ -161,8 +161,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * set the rule count, if the count is less than 0.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to set the rule count, if
+     * the count is less than 0.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testSetRuleCountThrowsExceptionWhenCountIsLessThanZero() {
@@ -197,8 +197,7 @@ public class AprioriTest extends AbstractDataTest {
         assertEquals(configuration1.getMinSupport(), configuration2.getMinSupport());
         assertEquals(configuration1.getMaxSupport(), configuration2.getMaxSupport());
         assertEquals(configuration1.getSupportDelta(), configuration2.getSupportDelta());
-        assertEquals(configuration1.getFrequentItemSetCount(),
-                configuration2.getFrequentItemSetCount());
+        assertEquals(configuration1.getFrequentItemSetCount(), configuration2.getFrequentItemSetCount());
         assertEquals(configuration1.isGeneratingRules(), configuration2.isGeneratingRules());
         assertEquals(configuration1.getMinConfidence(), configuration2.getMinConfidence());
         assertEquals(configuration1.getMaxConfidence(), configuration2.getMaxConfidence());
@@ -230,11 +229,9 @@ public class AprioriTest extends AbstractDataTest {
         configuration.setMaxConfidence(maxConfidence);
         configuration.setConfidenceDelta(confidenceDelta);
         configuration.setRuleCount(ruleCount);
-        assertEquals("[minSupport=" + minSupport + ", maxSupport=" + maxSupport +
-                ", supportDelta=" + supportDelta + ", frequentItemSetCount=" +
-                frequentItemSetCount + ", generateRules=" + generateRules + ", minConfidence=" +
-                minConfidence + ", maxConfidence=" + maxConfidence + ", confidenceDelta=" +
-                confidenceDelta + ", ruleCount=" + ruleCount + "]", configuration.toString());
+        assertEquals(
+                "[minSupport=" + minSupport + ", maxSupport=" + maxSupport + ", supportDelta=" + supportDelta + ", frequentItemSetCount=" + frequentItemSetCount + ", generateRules=" + generateRules + ", minConfidence=" + minConfidence + ", maxConfidence=" + maxConfidence + ", confidenceDelta=" + confidenceDelta + ", ruleCount=" + ruleCount + "]",
+                configuration.toString());
     }
 
     /**
@@ -314,8 +311,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests the functionality of the builder, when configuring the Apriori algorithm to not trying
-     * to find a specific number of frequent item sets.
+     * Tests the functionality of the builder, when configuring the Apriori algorithm to not trying to find a specific
+     * number of frequent item sets.
      */
     @Test
     public final void testBuilderWhenNotTryingToFindASpecificNumberOfFrequentItemSets() {
@@ -323,10 +320,8 @@ public class AprioriTest extends AbstractDataTest {
         double maxSupport = 0.8;
         double supportDelta = 0.2;
         int frequentItemSetCount = 0;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(minSupport)
-                .maxSupport(maxSupport)
-                .supportDelta(supportDelta)
-                .frequentItemSetCount(frequentItemSetCount).create();
+        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(minSupport).maxSupport(maxSupport).supportDelta(
+                supportDelta).frequentItemSetCount(frequentItemSetCount).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -336,8 +331,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests the functionality of the builder, when configuring the Apriori algorithm to trying to
-     * find a specific number of frequent item sets.
+     * Tests the functionality of the builder, when configuring the Apriori algorithm to trying to find a specific
+     * number of frequent item sets.
      */
     @Test
     public final void testBuilderWhenTryingToFindASpecificNumberOfFrequentItemSets() {
@@ -345,10 +340,8 @@ public class AprioriTest extends AbstractDataTest {
         double maxSupport = 0.8;
         double supportDelta = 0.2;
         int frequentItemSetCount = 2;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount)
-                .minSupport(minSupport)
-                .maxSupport(maxSupport)
-                .supportDelta(supportDelta).create();
+        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount).minSupport(
+                minSupport).maxSupport(maxSupport).supportDelta(supportDelta).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -358,8 +351,7 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests the functionality of the builder, when configuring the Apriori algorithm to generate
-     * association rules.
+     * Tests the functionality of the builder, when configuring the Apriori algorithm to generate association rules.
      */
     @Test
     public final void testBuilderWhenGeneratingAssociationRules() {
@@ -371,11 +363,10 @@ public class AprioriTest extends AbstractDataTest {
         double maxConfidence = 0.8;
         double confidenceDelta = 0.2;
         int ruleCount = 0;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount)
-                .generateRules(minConfidence).minSupport(minSupport).maxSupport(maxSupport)
-                .supportDelta(supportDelta).frequentItemSetCount(frequentItemSetCount)
-                .maxConfidence(maxConfidence).confidenceDelta(confidenceDelta).ruleCount(ruleCount)
-                .create();
+        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount).generateRules(
+                minConfidence).minSupport(minSupport).maxSupport(maxSupport).supportDelta(
+                supportDelta).frequentItemSetCount(frequentItemSetCount).maxConfidence(maxConfidence).confidenceDelta(
+                confidenceDelta).ruleCount(ruleCount).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -389,8 +380,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests the functionality of the builder, when configuring the Apriori algorithm to trying to
-     * generate a specific number of association rules.
+     * Tests the functionality of the builder, when configuring the Apriori algorithm to trying to generate a specific
+     * number of association rules.
      */
     @Test
     public final void testBuilderWhenTryingToGenerateASpecificNumberOfAssociationRules() {
@@ -402,11 +393,10 @@ public class AprioriTest extends AbstractDataTest {
         double maxConfidence = 0.8;
         double confidenceDelta = 0.2;
         int ruleCount = 2;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount)
-                .generateRules(ruleCount).minSupport(minSupport).maxSupport(maxSupport)
-                .supportDelta(supportDelta).frequentItemSetCount(frequentItemSetCount)
-                .minConfidence(minConfidence).maxConfidence(maxConfidence)
-                .confidenceDelta(confidenceDelta).create();
+        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount).generateRules(
+                ruleCount).minSupport(minSupport).maxSupport(maxSupport).supportDelta(
+                supportDelta).frequentItemSetCount(frequentItemSetCount).minConfidence(minConfidence).maxConfidence(
+                maxConfidence).confidenceDelta(confidenceDelta).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -420,8 +410,7 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests, if all class members are set correctly by the constructor, which expects a
-     * configuration as a parameter.
+     * Tests, if all class members are set correctly by the constructor, which expects a configuration as a parameter.
      */
     @Test
     public final void testConstructorWithConfigurationParameter() {
@@ -431,8 +420,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects
-     * a configuration as a parameter, if the configuration is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects a configuration as
+     * a parameter, if the configuration is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testConstructorWithConfigurationParameterThrowsException() {
@@ -440,21 +429,20 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests, if all class members are set correctly by the constructor, which expects a
-     * configuration and tasks as parameters.
+     * Tests, if all class members are set correctly by the constructor, which expects a configuration and tasks as
+     * parameters.
      */
     @Test
     public final void testConstructorWithConfigurationAndTaskParameters() {
         Configuration configuration = mock(Configuration.class);
-        Apriori<NamedItem> apriori = new Apriori<>(configuration,
-                new FrequentItemSetMinerTask<>(configuration),
+        Apriori<NamedItem> apriori = new Apriori<>(configuration, new FrequentItemSetMinerTask<>(configuration),
                 new AssociationRuleGeneratorTask<>(configuration));
         assertEquals(configuration, apriori.getConfiguration());
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects
-     * a configuration and tasks as parameters, if the configuration is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects a configuration and
+     * tasks as parameters, if the configuration is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testConstructorWithConfigurationAndTaskParametersThrowsExceptionWhenConfigurationIsNull() {
@@ -464,19 +452,18 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects
-     * a configuration and tasks as parameters, if the frequent item set miner task is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects a configuration and
+     * tasks as parameters, if the frequent item set miner task is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testConstructorWithConfigurationAndTaskParametersThrowsExceptionWhenFrequentItemSetMinerTaskIsNull() {
         Configuration configuration = mock(Configuration.class);
-        new Apriori<NamedItem>(configuration, null,
-                new AssociationRuleGeneratorTask<>(configuration));
+        new Apriori<NamedItem>(configuration, null, new AssociationRuleGeneratorTask<>(configuration));
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects
-     * a configuration and tasks as parameters, if the association rule generator task is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the constructor, which expects a configuration and
+     * tasks as parameters, if the association rule generator task is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testConstructorWithConfigurationAndTaskParametersThrowsExceptionWhenAssociationRuleGeneratorTaskIsNull() {
@@ -485,8 +472,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests the functionality of the method, which allows to execute the Apriori algorithm, if no
-     * association rules should be generated.
+     * Tests the functionality of the method, which allows to execute the Apriori algorithm, if no association rules
+     * should be generated.
      */
     @Test
     public final void testExecuteWhenNotGeneratingRules() {
@@ -503,8 +490,8 @@ public class AprioriTest extends AbstractDataTest {
         itemSet2.setSupport(0.9);
         map.put(itemSet1.hashCode(), itemSet1);
         map.put(itemSet2.hashCode(), itemSet2);
-        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask = new FrequentItemSetMinerTask<>(
-                configuration, (iterator, minSupport) -> map);
+        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask = new FrequentItemSetMinerTask<>(configuration,
+                (iterator, minSupport) -> map);
         AssociationRuleGeneratorTask<NamedItem> associationRuleGeneratorTask = new AssociationRuleGeneratorTask<>(
                 configuration, (frequentItemSets, minConfidence) -> {
             throw new RuntimeException();
@@ -526,8 +513,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Tests the functionality of the method, which allows to execute the Apriori algorithm, if
-     * association rules should be generated.
+     * Tests the functionality of the method, which allows to execute the Apriori algorithm, if association rules should
+     * be generated.
      */
     @Test
     public final void testExecuteWhenGeneratingRules() {
@@ -545,11 +532,10 @@ public class AprioriTest extends AbstractDataTest {
         map.put(itemSet1.hashCode(), itemSet1);
         map.put(itemSet2.hashCode(), itemSet2);
         RuleSet<NamedItem> ruleSet = new RuleSet<>(null);
-        AssociationRule<NamedItem> associationRule = new AssociationRule<>(new ItemSet<>(),
-                new ItemSet<>(), 0.5);
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, null);
         ruleSet.add(associationRule);
-        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask = new FrequentItemSetMinerTask<>(
-                configuration, (iterator, minSupport) -> map);
+        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask = new FrequentItemSetMinerTask<>(configuration,
+                (iterator, minSupport) -> map);
         AssociationRuleGeneratorTask<NamedItem> associationRuleGeneratorTask = new AssociationRuleGeneratorTask<>(
                 configuration, (frequentItemSets, minConfidence) -> ruleSet);
         File file = getInputFile(INPUT_FILE_1);
@@ -569,8 +555,8 @@ public class AprioriTest extends AbstractDataTest {
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to
-     * execute the Apriori algorithm, if the iterator, which is passed as a parameter, is null.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the method, which allows to execute the Apriori
+     * algorithm, if the iterator, which is passed as a parameter, is null.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testExecuteThrowsException() {

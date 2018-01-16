@@ -14,6 +14,7 @@
 package de.mrapp.apriori;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -26,6 +27,9 @@ import static de.mrapp.util.Condition.*;
  * association rule consist of one or several items. These item sets must be distinct. An association rule specifies,
  * that if the items, which are contained by its body, occur in a transaction, the items, which are given in its head,
  * do also occur with a certain probability.
+ * <p>
+ * Optionally, the association rule may only be valid for a certain time interval. This is referred to as a "temporal
+ * association rule".
  *
  * @param <ItemType> The type of the items, the association rule's body and head consist of
  * @author Michael Rapp
@@ -54,17 +58,24 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
     private final double support;
 
     /**
+     * The time interval, the association rule is valid for.
+     */
+    private final TimeInterval timeInterval;
+
+    /**
      * Creates a new association rule.
      *
-     * @param body    An item set, which contains the items, which are contained by the association rule's body, as an
-     *                instance of the class {@link ItemSet}. The item set may not be null
-     * @param head    An item set, which contains the items, which are contained by the association rule's head, as an
-     *                instance of the class {@link ItemSet}. The item set may no
-     * @param support The support of the association rule as a {@link Double} value. The support must be at least 0 and
-     *                at maximum 1
+     * @param body         An item set, which contains the items, which are contained by the association rule's body, as
+     *                     an instance of the class {@link ItemSet}. The item set may not be null
+     * @param head         An item set, which contains the items, which are contained by the association rule's head, as
+     *                     an instance of the class {@link ItemSet}. The item set may no
+     * @param support      The support of the association rule as a {@link Double} value. The support must be at least 0
+     *                     and at maximum 1
+     * @param timeInterval The time interval, the association rule is valid for, as an instance of the class {@link
+     *                     TimeInterval} or null, if the association rule is not temporal
      */
     public AssociationRule(@NotNull final ItemSet<ItemType> body, @NotNull final ItemSet<ItemType> head,
-                           final double support) {
+                           final double support, @Nullable final TimeInterval timeInterval) {
         ensureNotNull(body, "The body may not be null");
         ensureNotNull(head, "The head may not be null");
         ensureAtLeast(support, 0, "The support must be at least 0");
@@ -72,6 +83,7 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
         this.body = body;
         this.head = head;
         this.support = support;
+        this.timeInterval = timeInterval;
     }
 
     /**
@@ -104,6 +116,37 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
      */
     public final double getSupport() {
         return support;
+    }
+
+    /**
+     * Returns the time interval, the association rule is valid for.
+     *
+     * @return The time interval, the association rule is valid for, as an instance of the class {@link TimeInterval} or
+     * null, if the association rule is not temporal
+     */
+    public final TimeInterval getTimeInterval() {
+        return timeInterval;
+    }
+
+    /**
+     * Returns, whether the association rule is valid at a specific moment in time, or not.
+     *
+     * @param timestamp The timestamp, which specifies the moment in time to be checked, as a {@link Long} value
+     * @return True, if the association rule is valid at the given moment in time, false otherwise or if the association
+     * rule is not temporal
+     */
+    public final boolean isValidAt(final long timestamp) {
+        return !isTemporal() || timeInterval.includes(timestamp);
+    }
+
+    /**
+     * Returns, whether the association rule is only valid for a certain time interval. This is referred to as a
+     * "temporal association rule".
+     *
+     * @return True, if the association rule is only valid for a certain time interval, false otherwise
+     */
+    public final boolean isTemporal() {
+        return timeInterval != null;
     }
 
     /**
@@ -170,12 +213,13 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
 
     @Override
     public AssociationRule<ItemType> clone() {
-        return new AssociationRule<>(body.clone(), head.clone(), support);
+        return new AssociationRule<>(body.clone(), head.clone(), support,
+                timeInterval != null ? timeInterval.clone() : null);
     }
 
     @Override
     public String toString() {
-        return body.toString() + " -> " + head.toString();
+        return body.toString() + " -> " + head.toString() + (isTemporal() ? "; " + timeInterval.toString() : "");
     }
 
     @Override
@@ -186,6 +230,7 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
         result = prime * result + head.hashCode();
         long supportLong = Double.doubleToLongBits(support);
         result = prime * result + (int) (supportLong ^ (supportLong >>> 32));
+        result = prime * result + (timeInterval == null ? 0 : timeInterval.hashCode());
         return result;
     }
 
@@ -198,7 +243,18 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
         if (getClass() != obj.getClass())
             return false;
         AssociationRule other = (AssociationRule) obj;
-        return body.equals(other.body) && head.equals(other.head) && support == other.support;
+        if (!body.equals(other.body))
+            return false;
+        if (!head.equals(other.head))
+            return false;
+        if (support != other.support)
+            return false;
+        if (timeInterval == null) {
+            if (other.timeInterval != null)
+                return false;
+        } else if (!timeInterval.equals(other.timeInterval))
+            return false;
+        return true;
     }
 
 }

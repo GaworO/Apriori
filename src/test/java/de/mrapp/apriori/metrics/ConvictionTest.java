@@ -41,7 +41,7 @@ public class ConvictionTest {
         head.add(new NamedItem("b"));
         head.setSupport(headSupport);
         double support = 0.5;
-        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, support);
+        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, support, null);
         double confidence = new Confidence().evaluate(rule);
         assertEquals((1 - headSupport) / (1 - confidence), new Conviction().evaluate(rule), 0);
     }
@@ -56,13 +56,13 @@ public class ConvictionTest {
         body.setSupport(0.5);
         ItemSet<NamedItem> head = new ItemSet<>();
         head.add(new NamedItem("b"));
-        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, 0.5);
+        AssociationRule<NamedItem> rule = new AssociationRule<>(body, head, 0.5, null);
         assertEquals(0, new Conviction().evaluate(rule), 0);
     }
 
     /**
-     * Ensures, that an {@link IllegalArgumentException} is thrown by the evaluate-method, when
-     * passing null as a parameter.
+     * Ensures, that an {@link IllegalArgumentException} is thrown by the evaluate-method, when passing null as a
+     * parameter.
      */
     @Test(expected = IllegalArgumentException.class)
     public final void testEvaluateThrowsException() {
