@@ -13,14 +13,36 @@
  */
 package de.mrapp.apriori;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
- * Defines the interface, a transaction, which consists of multiple items, must implement. The
- * Apriori algorithm processes a set of transactions in order to find frequent item sets.
+ * Defines the interface, a transaction, which consists of multiple items, must implement. The Apriori algorithm
+ * processes a set of transactions in order to find frequent item sets.
  *
  * @param <ItemType> The type of the items, the transaction consists of
  * @author Michael Rapp
  * @since 1.0.0
  */
 public interface Transaction<ItemType extends Item> extends Iterable<ItemType> {
+
+    /**
+     * Returns the time interval, the transaction corresponds to.
+     *
+     * @return The time interval, the transaction corresponds to, as an instance of the class {@link TimeInterval} or
+     * null, if the transaction does not correspond to a certain time interval
+     */
+    @Nullable
+    default TimeInterval getTimeInterval() {
+        return null;
+    }
+
+    /**
+     * Returns, whether the transaction corresponds to a certain time interval, or not.
+     *
+     * @return True, if the transaction corresponds to a certain time interval, false otherwise
+     */
+    default boolean isTemporal() {
+        return getTimeInterval() != null;
+    }
 
 }
