@@ -17,6 +17,7 @@ import de.mrapp.apriori.datastructure.TransactionalItemSet;
 import de.mrapp.apriori.tasks.AssociationRuleGeneratorTask;
 import de.mrapp.apriori.tasks.FrequentItemSetMinerTask;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +28,8 @@ import java.util.Map;
 import static de.mrapp.util.Condition.*;
 
 /**
- * An implementation of the Apriori algorithm for mining frequent item sets and (optionally)
- * generating association rules. The algorithm processes a set of transactions, of which each one
- * consists of multiple items.
+ * An implementation of the Apriori algorithm for mining frequent item sets and (optionally) generating association
+ * rules. The algorithm processes a set of transactions, of which each one consists of multiple items.
  *
  * @param <ItemType> The type of the items, which are processed by the algorithm
  * @author Michael Rapp
@@ -48,20 +48,29 @@ public class Apriori<ItemType extends Item> {
         private static final long serialVersionUID = 1L;
 
         /**
-         * The minimum support, which must at least be reached by item sets to be considered
-         * frequent.
+         * The minimum start time of a transaction to be taken into account by the algorithm.
+         */
+        private Long minStartTime;
+
+        /**
+         * The maximum start time of a transaction to be taken into account by the algorithm.
+         */
+        private Long maxEndTime;
+
+        /**
+         * The minimum support, which must at least be reached by item sets to be considered frequent.
          */
         private double minSupport;
 
         /**
-         * The minimum support, which should initially be used, when trying to find a specific
-         * number of frequent item sets.
+         * The minimum support, which should initially be used, when trying to find a specific number of frequent item
+         * sets.
          */
         private double maxSupport;
 
         /**
-         * The value, the minimum support should be decreased by after each iteration, when trying
-         * to find a specific number of frequent item sets.
+         * The value, the minimum support should be decreased by after each iteration, when trying to find a specific
+         * number of frequent item sets.
          */
         private double supportDelta;
 
@@ -81,14 +90,14 @@ public class Apriori<ItemType extends Item> {
         private double minConfidence;
 
         /**
-         * The minimum confidence, which should initially be used, when trying to generate a
-         * specific number of association rules.
+         * The minimum confidence, which should initially be used, when trying to generate a specific number of
+         * association rules.
          */
         private double maxConfidence;
 
         /**
-         * The value, the minimum confidence should be decreased by, when trying to generate a
-         * specific number of association rules.
+         * The value, the minimum confidence should be decreased by, when trying to generate a specific number of
+         * association rules.
          */
         private double confidenceDelta;
 
@@ -101,6 +110,8 @@ public class Apriori<ItemType extends Item> {
          * Creates a new configuration of the Apriori algorithm with default values.
          */
         protected Configuration() {
+            setMinStartTime(null);
+            setMaxEndTime(null);
             setMinSupport(0);
             setMaxSupport(1);
             setSupportDelta(0.1);
@@ -113,72 +124,110 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Returns the minimum support, which must at least be reached by an item set to be
-         * considered frequent.
+         * Returns the minimum start time of a transaction to be taken into account by the algorithm.
          *
-         * @return The minimum support, which must at least be reached by an item set to be
-         * considered frequent, as a {@link Double} value
+         * @return The minimum start time of a transaction to be taken into account by the algorithm, as a {@link Long}
+         * value or null, if all transaction are taken into account regardless of their start time
+         */
+        @Nullable
+        public Long getMinStartTime() {
+            return minStartTime;
+        }
+
+        /**
+         * Sets the time interval, a transaction must be included in, to be taken into account by the algorithm.
+         *
+         * @param minStartTime The minimum start time, which should be set, as a {@link Long} value or null, if no
+         *                     minimum start time should be set
+         */
+        public void setMinStartTime(@Nullable final Long minStartTime) {
+            this.minStartTime = minStartTime;
+        }
+
+        /**
+         * Returns the maximum end time of a transaction to be taken into account by the algorithm.
+         *
+         * @return The maximum end time of a transaction to be taken into account by the algorithm, as a {@link Long}
+         * value or null, if all transaction are taken into account regardless of their end time
+         */
+        @Nullable
+        public Long getMaxEndTime() {
+            return maxEndTime;
+        }
+
+        /**
+         * Sets the time interval, a transaction must be included in, to be taken into account by the algorithm.
+         *
+         * @param maxEndTime The maximum end time, which should be set, as a {@link Long} value or null, if no maximum
+         *                   end time should be set
+         */
+        public void setMaxEndTime(@Nullable final Long maxEndTime) {
+            this.maxEndTime = maxEndTime;
+        }
+
+        /**
+         * Returns the minimum support, which must at least be reached by an item set to be considered frequent.
+         *
+         * @return The minimum support, which must at least be reached by an item set to be considered frequent, as a
+         * {@link Double} value
          */
         public double getMinSupport() {
             return minSupport;
         }
 
         /**
-         * Sets the minimum support, which must at least be reached by an item set to be considered
-         * frequent.
+         * Sets the minimum support, which must at least be reached by an item set to be considered frequent.
          *
-         * @param minSupport The support, which should be set, as a {@link Double} value. The
-         *                   support must at least be 0 and at maximum the maximum support
+         * @param minSupport The support, which should be set, as a {@link Double} value. The support must at least be 0
+         *                   and at maximum the maximum support
          */
         protected void setMinSupport(final double minSupport) {
             ensureAtLeast(minSupport, 0, "The minimum support must be at least 0");
-            ensureAtMaximum(minSupport, maxSupport,
-                    "The minimum support must be at maximum " + maxSupport);
+            ensureAtMaximum(minSupport, maxSupport, "The minimum support must be at maximum " + maxSupport);
             this.minSupport = minSupport;
         }
 
         /**
-         * Returns the minimum support, which should initially be used, when trying to find a
-         * specific number of frequent item sets.
+         * Returns the minimum support, which should initially be used, when trying to find a specific number of
+         * frequent item sets.
          *
-         * @return The minimum support, which should initially be used, when trying to find a
-         * specific number of frequent item sets, as a {@link Double} value
+         * @return The minimum support, which should initially be used, when trying to find a specific number of
+         * frequent item sets, as a {@link Double} value
          */
         public double getMaxSupport() {
             return maxSupport;
         }
 
         /**
-         * Sets the minimum support, which should initially be used, when trying to find a specific
-         * number of frequent item sets.
+         * Sets the minimum support, which should initially be used, when trying to find a specific number of frequent
+         * item sets.
          *
-         * @param maxSupport The support, which should be set, as a {@link Double} value. The
-         *                   support must be at least the minimum support
+         * @param maxSupport The support, which should be set, as a {@link Double} value. The support must be at least
+         *                   the minimum support
          */
         protected void setMaxSupport(final double maxSupport) {
             ensureAtMaximum(maxSupport, 1, "The maximum support must be at maximum 1");
-            ensureAtLeast(maxSupport, minSupport, "The maximum support must be at least" +
-                    minSupport);
+            ensureAtLeast(maxSupport, minSupport, "The maximum support must be at least" + minSupport);
             this.maxSupport = maxSupport;
         }
 
         /**
-         * Returns the value, the minimum support should be decreased by after each iteration, when
-         * trying to find a specific number of frequent item sets.
+         * Returns the value, the minimum support should be decreased by after each iteration, when trying to find a
+         * specific number of frequent item sets.
          *
-         * @return The value, the minimum support should be decreased by after each iteration, when
-         * trying to find a specific number of frequent item sets, as a {@link Double} value
+         * @return The value, the minimum support should be decreased by after each iteration, when trying to find a
+         * specific number of frequent item sets, as a {@link Double} value
          */
         public double getSupportDelta() {
             return supportDelta;
         }
 
         /**
-         * Sets the value, the minimum support should be decreased by after each iteration, when
-         * trying to find a specific number of frequent item sets.
+         * Sets the value, the minimum support should be decreased by after each iteration, when trying to find a
+         * specific number of frequent item sets.
          *
-         * @param supportDelta The value, which should be set, as a {@link Double} value. The value
-         *                     must be greater than 0
+         * @param supportDelta The value, which should be set, as a {@link Double} value. The value must be greater than
+         *                     0
          */
         protected void setSupportDelta(final double supportDelta) {
             ensureGreater(supportDelta, 0, "The support delta must be greater than 0");
@@ -188,8 +237,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Returns the number of frequent item sets, the Apriori algorithm should try to find.
          *
-         * @return The number of frequent item sets, the Apriori algorithm should try to find, as an
-         * {@link Integer} value
+         * @return The number of frequent item sets, the Apriori algorithm should try to find, as an {@link Integer}
+         * value
          */
         public int getFrequentItemSetCount() {
             return frequentItemSetCount;
@@ -198,13 +247,12 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the number of of frequent item sets, the Apriori algorithm should try to find.
          *
-         * @param frequentItemSetCount The number of frequent item sets, which should be set, as an
-         *                             {@link Integer} value or 0, if the Apriori algorithm should
-         *                             not try to find a specific number of frequent item sets
+         * @param frequentItemSetCount The number of frequent item sets, which should be set, as an {@link Integer}
+         *                             value or 0, if the Apriori algorithm should not try to find a specific number of
+         *                             frequent item sets
          */
         protected void setFrequentItemSetCount(final int frequentItemSetCount) {
-            ensureAtLeast(frequentItemSetCount, 0,
-                    "The number of frequent item sets must be at least 0");
+            ensureAtLeast(frequentItemSetCount, 0, "The number of frequent item sets must be at least 0");
             this.frequentItemSetCount = frequentItemSetCount;
         }
 
@@ -229,8 +277,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Returns the minimum confidence, which must at least be reached by association rules.
          *
-         * @return The minimum confidence, which must at least be reached by association rules, as a
-         * {@link Double} value
+         * @return The minimum confidence, which must at least be reached by association rules, as a {@link Double}
+         * value
          */
         public double getMinConfidence() {
             return minConfidence;
@@ -239,59 +287,56 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the minimum confidence, which must at least be reached by association rules.
          *
-         * @param minConfidence The confidence, which should be set, as a {@link Double} value. The
-         *                      confidence must be at least 0 and at maximum the maximum confidence
+         * @param minConfidence The confidence, which should be set, as a {@link Double} value. The confidence must be
+         *                      at least 0 and at maximum the maximum confidence
          */
         protected void setMinConfidence(final double minConfidence) {
             ensureAtLeast(minConfidence, 0, "The minimum confidence must be at least 0");
-            ensureAtMaximum(minConfidence, maxConfidence,
-                    "The minimum confidence must be at maximum " + maxConfidence);
+            ensureAtMaximum(minConfidence, maxConfidence, "The minimum confidence must be at maximum " + maxConfidence);
             this.minConfidence = minConfidence;
         }
 
         /**
-         * Returns the minimum confidence, which should initially be used, when trying to generate a
-         * specific number of association rules.
+         * Returns the minimum confidence, which should initially be used, when trying to generate a specific number of
+         * association rules.
          *
-         * @return The minimum confidence, which should initially be used, when trying to generate a
-         * specific number of association rules, as a {@link Double} value
+         * @return The minimum confidence, which should initially be used, when trying to generate a specific number of
+         * association rules, as a {@link Double} value
          */
         public double getMaxConfidence() {
             return maxConfidence;
         }
 
         /**
-         * Sets the minimum confidence, which should initially be used, when trying to generate a
-         * specific number of association rules.
+         * Sets the minimum confidence, which should initially be used, when trying to generate a specific number of
+         * association rules.
          *
-         * @param maxConfidence The confidence, which should be set, as a {@link Double} value. The
-         *                      confidence must be at least 0 and at maximum 1
+         * @param maxConfidence The confidence, which should be set, as a {@link Double} value. The confidence must be
+         *                      at least 0 and at maximum 1
          */
         protected void setMaxConfidence(final double maxConfidence) {
             ensureAtMaximum(maxConfidence, 1, "The max confidence must be at maximum 1");
-            ensureAtLeast(maxConfidence, minConfidence,
-                    "The max confidence must be at least " + minConfidence);
+            ensureAtLeast(maxConfidence, minConfidence, "The max confidence must be at least " + minConfidence);
             this.maxConfidence = maxConfidence;
         }
 
         /**
-         * Returns the value, the minimum confidence should be decreased by after each iteration,
-         * when trying to generate a specific number of association rules.
+         * Returns the value, the minimum confidence should be decreased by after each iteration, when trying to
+         * generate a specific number of association rules.
          *
-         * @return The value, the minimum confidence should be decreased by after each iteration,
-         * when trying to generate a specific number of association rules, as a {@link Double}
-         * value
+         * @return The value, the minimum confidence should be decreased by after each iteration, when trying to
+         * generate a specific number of association rules, as a {@link Double} value
          */
         public double getConfidenceDelta() {
             return confidenceDelta;
         }
 
         /**
-         * Sets the value, the minimum confidence should be decreased by after each iteration, when
-         * trying to generate a specific number of association rules.
+         * Sets the value, the minimum confidence should be decreased by after each iteration, when trying to generate a
+         * specific number of association rules.
          *
-         * @param confidenceDelta The value, which should be set, as a {@link Double} value. The
-         *                        value must be greater than 0
+         * @param confidenceDelta The value, which should be set, as a {@link Double} value. The value must be greater
+         *                        than 0
          */
         protected void setConfidenceDelta(final double confidenceDelta) {
             ensureGreater(confidenceDelta, 0, "The confidence delta must be greater than 0");
@@ -301,8 +346,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Returns the number of association rules, the Apriori algorithm should try to generate.
          *
-         * @return The number of association rules, the Apriori algorithm should try to generate, as
-         * an {@link Integer} value
+         * @return The number of association rules, the Apriori algorithm should try to generate, as an {@link Integer}
+         * value
          */
         public int getRuleCount() {
             return ruleCount;
@@ -311,9 +356,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the number of association rule, the Apriori algorithm should try to generate.
          *
-         * @param ruleCount The number of association rules, which should be set, as an {@link
-         *                  Integer} value or 0, if the Apriori algorithm should not try to generate
-         *                  a specific number of association rules
+         * @param ruleCount The number of association rules, which should be set, as an {@link Integer} value or 0, if
+         *                  the Apriori algorithm should not try to generate a specific number of association rules
          */
         protected void setRuleCount(final int ruleCount) {
             ensureAtLeast(ruleCount, 0, "The rule count must be at least 0");
@@ -324,6 +368,8 @@ public class Apriori<ItemType extends Item> {
         @Override
         public final Configuration clone() {
             Configuration clone = new Configuration();
+            clone.minStartTime = minStartTime;
+            clone.maxEndTime = maxEndTime;
             clone.minSupport = minSupport;
             clone.maxSupport = maxSupport;
             clone.supportDelta = supportDelta;
@@ -338,17 +384,19 @@ public class Apriori<ItemType extends Item> {
 
         @Override
         public final String toString() {
-            return "[minSupport=" + minSupport + ", maxSupport=" + maxSupport +
-                    ", supportDelta=" + supportDelta + ", frequentItemSetCount=" +
-                    frequentItemSetCount + ", generateRules=" + generateRules + ", minConfidence=" +
-                    minConfidence + ", maxConfidence=" + maxConfidence + ", confidenceDelta=" +
-                    confidenceDelta + ", ruleCount=" + ruleCount + "]";
+            return "[minStartTime=" + minStartTime + ", maxEndTime=" + maxEndTime + ", minSupport=" + minSupport +
+                    ", maxSupport=" + maxSupport + ", supportDelta=" + supportDelta + ", frequentItemSetCount=" +
+                    frequentItemSetCount + ", generateRules=" + generateRules + ", minConfidence=" + minConfidence +
+                    ", maxConfidence=" + maxConfidence + ", confidenceDelta=" + confidenceDelta + ", ruleCount=" +
+                    ruleCount + "]";
         }
 
         @Override
         public final int hashCode() {
             final int prime = 31;
             int result = 1;
+            result = prime * result + (minStartTime == null ? 0 : (int) (minStartTime ^ (minStartTime >>> 32)));
+            result = prime * result + (maxEndTime == null ? 0 : (int) (maxEndTime ^ (maxEndTime >>> 32)));
             long tempMinSupport = Double.doubleToLongBits(minSupport);
             result = prime * result + (int) (tempMinSupport ^ (tempMinSupport >>> 32));
             long tempMaxSupport = Double.doubleToLongBits(maxSupport);
@@ -376,19 +424,28 @@ public class Apriori<ItemType extends Item> {
             if (getClass() != obj.getClass())
                 return false;
             Configuration other = (Configuration) obj;
+            if (minStartTime == null) {
+                if (other.minStartTime != null)
+                    return false;
+            } else if (!minStartTime.equals(other.minStartTime))
+                return false;
+            if (maxEndTime == null) {
+                if (other.maxEndTime != null)
+                    return false;
+            } else if (!maxEndTime.equals(other.maxEndTime))
+                return false;
             return minSupport == other.minSupport && maxSupport == other.maxSupport &&
-                    supportDelta == other.supportDelta &&
-                    frequentItemSetCount == other.frequentItemSetCount &&
+                    supportDelta == other.supportDelta && frequentItemSetCount == other.frequentItemSetCount &&
                     generateRules == other.generateRules && minConfidence == other.minConfidence &&
-                    maxConfidence == other.maxConfidence &&
-                    confidenceDelta == other.confidenceDelta && ruleCount == other.ruleCount;
+                    maxConfidence == other.maxConfidence && confidenceDelta == other.confidenceDelta &&
+                    ruleCount == other.ruleCount;
         }
 
     }
 
     /**
-     * An abstract base class for all builders, which allow to configure and create instances of the
-     * class {@link Apriori}.
+     * An abstract base class for all builders, which allow to configure and create instances of the class {@link
+     * Apriori}.
      *
      * @param <ItemType> The type of the items, which are processed by the algorithm
      */
@@ -400,12 +457,10 @@ public class Apriori<ItemType extends Item> {
         protected final Configuration configuration;
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}.
          *
-         * @param minSupport The minimum support, which must at least be reached by an item set to
-         *                   be considered frequent, as a {@link Double value}. The support must be
-         *                   at least 0 and at maximum 1
+         * @param minSupport The minimum support, which must at least be reached by an item set to be considered
+         *                   frequent, as a {@link Double value}. The support must be at least 0 and at maximum 1
          */
         private AbstractBuilder(final double minSupport) {
             configuration = new Configuration();
@@ -413,13 +468,11 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}.
          *
-         * @param frequentItemSetCount The number of frequent item sets, the Apriori algorithm
-         *                             should try to find, as an {@link Integer} value or 0, if the
-         *                             algorithm should not try to find a specific number of
-         *                             frequent item sets
+         * @param frequentItemSetCount The number of frequent item sets, the Apriori algorithm should try to find, as an
+         *                             {@link Integer} value or 0, if the algorithm should not try to find a specific
+         *                             number of frequent item sets
          */
         private AbstractBuilder(final int frequentItemSetCount) {
             configuration = new Configuration();
@@ -427,11 +480,11 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}, by copying the properties of another builder.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}, by
+         * copying the properties of another builder.
          *
-         * @param builder The builder, which should be copied, as an instance of the class {@link
-         *                AbstractBuilder}. The builder may not be null
+         * @param builder The builder, which should be copied, as an instance of the class {@link AbstractBuilder}. The
+         *                builder may not be null
          */
         private AbstractBuilder(@NotNull final AbstractBuilder<ItemType> builder) {
             ensureNotNull(builder, "The builder may not be null");
@@ -441,8 +494,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Creates and returns the Apriori algorithm, which has been configured by the builder.
          *
-         * @return The Apriori algorithm, which has been created, as an instance of the class {@link
-         * Apriori}. The Apriori algorithm may not be null
+         * @return The Apriori algorithm, which has been created, as an instance of the class {@link Apriori}. The
+         * Apriori algorithm may not be null
          */
         @NotNull
         public final Apriori<ItemType> create() {
@@ -459,38 +512,61 @@ public class Apriori<ItemType extends Item> {
     public static class Builder<ItemType extends Item> extends AbstractBuilder<ItemType> {
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}.
          *
-         * @param minSupport The minimum support, which must at least be reached by an item set to
-         *                   be considered frequent, as a {@link Double value}. The support must be
-         *                   at least 0 and at maximum 1
+         * @param minSupport The minimum support, which must at least be reached by an item set to be considered
+         *                   frequent, as a {@link Double value}. The support must be at least 0 and at maximum 1
          */
         public Builder(final double minSupport) {
             super(minSupport);
         }
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}.
          *
-         * @param frequentItemSetCount The number of frequent item sets, the Apriori algorithm
-         *                             should try to find, as an {@link Integer} value or 0, if the
-         *                             algorithm should not try to find a specific number of
-         *                             frequent item sets
+         * @param frequentItemSetCount The number of frequent item sets, the Apriori algorithm should try to find, as an
+         *                             {@link Integer} value or 0, if the algorithm should not try to find a specific
+         *                             number of frequent item sets
          */
         public Builder(final int frequentItemSetCount) {
             super(frequentItemSetCount);
         }
 
         /**
-         * Sets the minimum support, which must at least be reached by an item set to be considered
-         * frequent.
+         * Sets the minimum start time of a transaction to be taken into account by the algorithm.
          *
-         * @param minSupport The support, which should be set, as a {@link Double} value. The
-         *                   support must at least be 0 and at maximum 1
-         * @return The builder, this method has been called upon, as an instance of the class {@link
-         * Builder}. The builder may not be null
+         * @param minStartTime The minimum start time, which should be set, as a {@link Long} value or null, if no
+         *                     minimum start time should be set
+         * @return The builder, this method has been called upon, as an instance of the class {@link Builder}. The
+         * builder may not be null
+         */
+        @NotNull
+        public final Builder<ItemType> minStartTime(@Nullable final Long minStartTime) {
+            configuration.setMinStartTime(minStartTime);
+            return this;
+        }
+
+        /**
+         * Sets the maximum end time of a transaction to be taken into account by the algorithm.
+         *
+         * @param maxEndTime The maximum end time, which should be set, as a {@link Long} value or null, if no maximum
+         *                   end time should be set
+         * @return The builder, this method has been called upon, as an instance of the class {@link Builder}. The
+         * builder may not be null
+         */
+        @NotNull
+        public final Builder<ItemType> maxEndTime(@Nullable final Long maxEndTime) {
+            configuration.setMaxEndTime(maxEndTime);
+            return this;
+        }
+
+        /**
+         * Sets the minimum support, which must at least be reached by an item set to be considered frequent.
+         *
+         * @param minSupport The support, which should be set, as a {@link Double} value. The support must at least be 0
+         *                   and at maximum 1
+         * @return The builder, this method has been called upon, as an instance of the class {@link Builder}. The
+         * builder may not be null
          */
         @NotNull
         public final Builder<ItemType> minSupport(final double minSupport) {
@@ -500,13 +576,13 @@ public class Apriori<ItemType extends Item> {
 
 
         /**
-         * Sets the minimum support, which should initially be used, when trying to find a specific
-         * number of frequent item sets.
+         * Sets the minimum support, which should initially be used, when trying to find a specific number of frequent
+         * item sets.
          *
-         * @param maxSupport The support, which should be set, as a {@link Double} value. The
-         *                   support must be at least the minimum support
-         * @return The builder, this method has been called upon, as an instance of the class {@link
-         * Builder}. The builder may not be null
+         * @param maxSupport The support, which should be set, as a {@link Double} value. The support must be at least
+         *                   the minimum support
+         * @return The builder, this method has been called upon, as an instance of the class {@link Builder}. The
+         * builder may not be null
          */
         @NotNull
         public final Builder<ItemType> maxSupport(final double maxSupport) {
@@ -515,13 +591,13 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Sets the value, the minimum support should be decreased by after each iteration, when
-         * trying to find a specific number of frequent item sets.
+         * Sets the value, the minimum support should be decreased by after each iteration, when trying to find a
+         * specific number of frequent item sets.
          *
-         * @param supportDelta The value, which should be set, as a {@link Double} value. The value
-         *                     must be greater than 0 and less than the maximum support
-         * @return The builder, this method has been called upon, as an instance of the class {@link
-         * Builder}. The builder may not be null
+         * @param supportDelta The value, which should be set, as a {@link Double} value. The value must be greater than
+         *                     0 and less than the maximum support
+         * @return The builder, this method has been called upon, as an instance of the class {@link Builder}. The
+         * builder may not be null
          */
         @NotNull
         public final Builder<ItemType> supportDelta(final double supportDelta) {
@@ -532,11 +608,11 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the number of of frequent item sets, the Apriori algorithm should try to find.
          *
-         * @param frequentItemSetCount The number of frequent item sets, which should be set, as an
-         *                             {@link Integer} value or 0, if the Apriori algorithm should
-         *                             not try to find a specific number of frequent item sets
-         * @return The builder, this method has been called upon, as an instance of the class {@link
-         * Builder}. The builder may not be null
+         * @param frequentItemSetCount The number of frequent item sets, which should be set, as an {@link Integer}
+         *                             value or 0, if the Apriori algorithm should not try to find a specific number of
+         *                             frequent item sets
+         * @return The builder, this method has been called upon, as an instance of the class {@link Builder}. The
+         * builder may not be null
          */
         @NotNull
         public final Builder<ItemType> frequentItemSetCount(final int frequentItemSetCount) {
@@ -547,11 +623,10 @@ public class Apriori<ItemType extends Item> {
         /**
          * Enables to generate association rules.
          *
-         * @param minConfidence The minimum confidence, which must at least be reached by
-         *                      association rules, as a {@link Double} value. The confidence must at
-         *                      least be 0 and at maximum 1
-         * @return The builder, which allows to configure the generation of association rules, as an
-         * instance of the class {@link RuleGeneratorBuilder}. The builder may not be null
+         * @param minConfidence The minimum confidence, which must at least be reached by association rules, as a {@link
+         *                      Double} value. The confidence must at least be 0 and at maximum 1
+         * @return The builder, which allows to configure the generation of association rules, as an instance of the
+         * class {@link RuleGeneratorBuilder}. The builder may not be null
          */
         @NotNull
         public final RuleGeneratorBuilder<ItemType> generateRules(final double minConfidence) {
@@ -561,11 +636,11 @@ public class Apriori<ItemType extends Item> {
         /**
          * Enables to generate association rules.
          *
-         * @param ruleCount The number of association rules, the Apriori algorithm should try to
-         *                  generate, as an {@link Integer} value or 0, if the algorithm should not
-         *                  try to generate a specific number of association rules
-         * @return The builder, which allows to configure the generation of association rules, as an
-         * instance of the class {@link RuleGeneratorBuilder}. The builder may not be null
+         * @param ruleCount The number of association rules, the Apriori algorithm should try to generate, as an {@link
+         *                  Integer} value or 0, if the algorithm should not try to generate a specific number of
+         *                  association rules
+         * @return The builder, which allows to configure the generation of association rules, as an instance of the
+         * class {@link RuleGeneratorBuilder}. The builder may not be null
          */
         @NotNull
         public final RuleGeneratorBuilder<ItemType> generateRules(final int ruleCount) {
@@ -575,56 +650,78 @@ public class Apriori<ItemType extends Item> {
     }
 
     /**
-     * A builder, which allows to configure and create instances of the class {@link Apriori}, which
-     * are configured to generate association rules.
+     * A builder, which allows to configure and create instances of the class {@link Apriori}, which are configured to
+     * generate association rules.
      *
      * @param <ItemType> The type of the items, which are processed by the algorithm
      */
-    public static class RuleGeneratorBuilder<ItemType extends Item> extends
-            AbstractBuilder<ItemType> {
+    public static class RuleGeneratorBuilder<ItemType extends Item> extends AbstractBuilder<ItemType> {
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}, which are configured to generate association rules.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}, which are
+         * configured to generate association rules.
          *
-         * @param builder       The builder, which has previously been used to configure the Apriori
-         *                      algorithm, as an instance of the class {@link AbstractBuilder}. The
-         *                      builder may not be null
-         * @param minConfidence The minimum confidence, which must at least be reached by
-         *                      association rules, as a {@link Double value}. The confidence must be
-         *                      greater than the minimum confidence and at maximum 1
+         * @param builder       The builder, which has previously been used to configure the Apriori algorithm, as an
+         *                      instance of the class {@link AbstractBuilder}. The builder may not be null
+         * @param minConfidence The minimum confidence, which must at least be reached by association rules, as a {@link
+         *                      Double value}. The confidence must be greater than the minimum confidence and at maximum
+         *                      1
          */
-        private RuleGeneratorBuilder(@NotNull final AbstractBuilder<ItemType> builder,
-                                     final double minConfidence) {
+        private RuleGeneratorBuilder(@NotNull final AbstractBuilder<ItemType> builder, final double minConfidence) {
             super(builder);
             configuration.setGenerateRules(true);
             minConfidence(minConfidence);
         }
 
         /**
-         * Creates a new builder, which allows to configure and create instances of the class {@link
-         * Apriori}, which are configured to generate association rules.
+         * Creates a new builder, which allows to configure and create instances of the class {@link Apriori}, which are
+         * configured to generate association rules.
          *
-         * @param builder   The builder, which has previously been used to configure the Apriori
-         *                  algorithm, as an instance of the class {@link AbstractBuilder}. The
-         *                  builder may not be null
-         * @param ruleCount The number of association rules, the Apriori algorithm should try to
-         *                  generate, as an {@link Integer} value or 0, if the algorithm should not
-         *                  try to generate a specific number of association rules
+         * @param builder   The builder, which has previously been used to configure the Apriori algorithm, as an
+         *                  instance of the class {@link AbstractBuilder}. The builder may not be null
+         * @param ruleCount The number of association rules, the Apriori algorithm should try to generate, as an {@link
+         *                  Integer} value or 0, if the algorithm should not try to generate a specific number of
+         *                  association rules
          */
-        private RuleGeneratorBuilder(@NotNull final AbstractBuilder<ItemType> builder,
-                                     final int ruleCount) {
+        private RuleGeneratorBuilder(@NotNull final AbstractBuilder<ItemType> builder, final int ruleCount) {
             super(builder);
             configuration.setGenerateRules(true);
             ruleCount(ruleCount);
         }
 
         /**
-         * Sets the minimum support, which must at least be reached by an item set to be considered
-         * frequent.
+         * Sets the minimum start time of a transaction to be taken into account by the algorithm.
          *
-         * @param minSupport The support, which should be set, as a {@link Double} value. The
-         *                   support must at least be 0 and at maximum 1
+         * @param minStartTime The minimum start time, which should be set, as a {@link Long} value or null, if no
+         *                     minimum start time should be set
+         * @return The builder, this method has been called upon, as an instance of the class {@link
+         * RuleGeneratorBuilder}. The builder may not be null
+         */
+        @NotNull
+        public final RuleGeneratorBuilder<ItemType> minStartTime(@Nullable final Long minStartTime) {
+            configuration.setMinStartTime(minStartTime);
+            return this;
+        }
+
+        /**
+         * Sets the maximum end time of a transaction to be taken into account by the algorithm.
+         *
+         * @param maxEndTime The maximum end time, which should be set, as a {@link Long} value or null, if no maximum
+         *                   end time should be set
+         * @return The builder, this method has been called upon, as an instance of the class {@link
+         * RuleGeneratorBuilder}. The builder may not be null
+         */
+        @NotNull
+        public final RuleGeneratorBuilder<ItemType> maxEndTime(@Nullable final Long maxEndTime) {
+            configuration.setMaxEndTime(maxEndTime);
+            return this;
+        }
+
+        /**
+         * Sets the minimum support, which must at least be reached by an item set to be considered frequent.
+         *
+         * @param minSupport The support, which should be set, as a {@link Double} value. The support must at least be 0
+         *                   and at maximum 1
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -635,11 +732,11 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Sets the minimum support, which should initially be used, when trying to find a specific
-         * number of frequent item sets.
+         * Sets the minimum support, which should initially be used, when trying to find a specific number of frequent
+         * item sets.
          *
-         * @param maxSupport The support, which should be set, as a {@link Double} value. The
-         *                   support must be at least the minimum support
+         * @param maxSupport The support, which should be set, as a {@link Double} value. The support must be at least
+         *                   the minimum support
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -650,11 +747,11 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Sets the value, the minimum support should be decreased by after each iteration, when
-         * trying to find a specific number of frequent item sets.
+         * Sets the value, the minimum support should be decreased by after each iteration, when trying to find a
+         * specific number of frequent item sets.
          *
-         * @param supportDelta The value, which should be set, as a {@link Double} value. The value
-         *                     must be greater than 0 and less than the maximum support
+         * @param supportDelta The value, which should be set, as a {@link Double} value. The value must be greater than
+         *                     0 and less than the maximum support
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -667,15 +764,14 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the number of of frequent item sets, the Apriori algorithm should try to find.
          *
-         * @param frequentItemSetCount The number of frequent item sets, which should be set, as an
-         *                             {@link Integer} value or 0, if the Apriori algorithm should
-         *                             not try to find a specific number of frequent item sets
+         * @param frequentItemSetCount The number of frequent item sets, which should be set, as an {@link Integer}
+         *                             value or 0, if the Apriori algorithm should not try to find a specific number of
+         *                             frequent item sets
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
         @NotNull
-        public final RuleGeneratorBuilder<ItemType> frequentItemSetCount(
-                final int frequentItemSetCount) {
+        public final RuleGeneratorBuilder<ItemType> frequentItemSetCount(final int frequentItemSetCount) {
             configuration.setFrequentItemSetCount(frequentItemSetCount);
             return this;
         }
@@ -683,8 +779,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the minimum confidence, which must at least be reached by association rules.
          *
-         * @param minConfidence The confidence, which should be set, as a {@link Double} value. The
-         *                      confidence must be at least 0 and at maximum 1
+         * @param minConfidence The confidence, which should be set, as a {@link Double} value. The confidence must be
+         *                      at least 0 and at maximum 1
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -695,11 +791,11 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Sets the minimum confidence, which should initially be used, when trying to generate a
-         * specific number of association rules.
+         * Sets the minimum confidence, which should initially be used, when trying to generate a specific number of
+         * association rules.
          *
-         * @param maxConfidence The confidence, which should be set, as a {@link Double} value. The
-         *                      confidence must be at least 0 and at maximum 1
+         * @param maxConfidence The confidence, which should be set, as a {@link Double} value. The confidence must be
+         *                      at least 0 and at maximum 1
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -710,11 +806,11 @@ public class Apriori<ItemType extends Item> {
         }
 
         /**
-         * Sets the value, the minimum confidence should be decreased by after each iteration, when
-         * trying to generate a specific number of association rules.
+         * Sets the value, the minimum confidence should be decreased by after each iteration, when trying to generate a
+         * specific number of association rules.
          *
-         * @param confidenceDelta The value, which should be set, as a {@link Double} value. The
-         *                        value must be greater than 0 and less than the maximum confidence
+         * @param confidenceDelta The value, which should be set, as a {@link Double} value. The value must be greater
+         *                        than 0 and less than the maximum confidence
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -727,9 +823,8 @@ public class Apriori<ItemType extends Item> {
         /**
          * Sets the number of association rule, the Apriori algorithm should try to generate.
          *
-         * @param ruleCount The number of association rules, which should be set, as an {@link
-         *                  Integer} value or 0, if the Apriori algorithm should not try to generate
-         *                  a specific number of association rules
+         * @param ruleCount The number of association rules, which should be set, as an {@link Integer} value or 0, if
+         *                  the Apriori algorithm should not try to generate a specific number of association rules
          * @return The builder, this method has been called upon, as an instance of the class {@link
          * RuleGeneratorBuilder}. The builder may not be null
          */
@@ -762,12 +857,11 @@ public class Apriori<ItemType extends Item> {
     private final AssociationRuleGeneratorTask<ItemType> associationRuleGeneratorTask;
 
     /**
-     * Creates a new implementation of the Apriori algorithm for mining frequent item sets and
-     * (optionally) generating association rules.
+     * Creates a new implementation of the Apriori algorithm for mining frequent item sets and (optionally) generating
+     * association rules.
      *
-     * @param configuration The configuration, which should be used by the apriori algorithm, as an
-     *                      instance of the class {@link Configuration}. The configuration may not
-     *                      be null
+     * @param configuration The configuration, which should be used by the apriori algorithm, as an instance of the
+     *                      class {@link Configuration}. The configuration may not be null
      */
     protected Apriori(@NotNull final Configuration configuration) {
         this(configuration, new FrequentItemSetMinerTask<>(configuration),
@@ -775,26 +869,23 @@ public class Apriori<ItemType extends Item> {
     }
 
     /**
-     * Creates a new implementation of the Apriori algorithm for mining frequent item sets and
-     * (optionally) generating association rules.
+     * Creates a new implementation of the Apriori algorithm for mining frequent item sets and (optionally) generating
+     * association rules.
      *
-     * @param configuration                The configuration, which should be used by the apriori
-     *                                     algorithm, as an instance of the class {@link
-     *                                     Configuration}. The configuration may not be null
-     * @param frequentItemSetMinerTask     The task, which should be used to find frequent item
-     *                                     sets, as an instance of the class {@link
-     *                                     FrequentItemSetMinerTask}. The task may not be null
-     * @param associationRuleGeneratorTask The task, which should be used to generate association
-     *                                     rules, as an instance of the class {@link
-     *                                     AssociationRuleGeneratorTask}. The task may not be null
+     * @param configuration                The configuration, which should be used by the apriori algorithm, as an
+     *                                     instance of the class {@link Configuration}. The configuration may not be
+     *                                     null
+     * @param frequentItemSetMinerTask     The task, which should be used to find frequent item sets, as an instance of
+     *                                     the class {@link FrequentItemSetMinerTask}. The task may not be null
+     * @param associationRuleGeneratorTask The task, which should be used to generate association rules, as an instance
+     *                                     of the class {@link AssociationRuleGeneratorTask}. The task may not be null
      */
     protected Apriori(@NotNull final Configuration configuration,
                       @NotNull final FrequentItemSetMinerTask<ItemType> frequentItemSetMinerTask,
                       @NotNull final AssociationRuleGeneratorTask<ItemType> associationRuleGeneratorTask) {
         ensureNotNull(configuration, "The configuration may not be null");
         ensureNotNull(frequentItemSetMinerTask, "The frequent item set miner task may not be null");
-        ensureNotNull(associationRuleGeneratorTask,
-                "The association rule generator task may not be null");
+        ensureNotNull(associationRuleGeneratorTask, "The association rule generator task may not be null");
         this.configuration = configuration;
         this.frequentItemSetMinerTask = frequentItemSetMinerTask;
         this.associationRuleGeneratorTask = associationRuleGeneratorTask;
@@ -803,8 +894,8 @@ public class Apriori<ItemType extends Item> {
     /**
      * Returns the configuration, which is used by the Apriori algorithm.
      *
-     * @return The configuration, which is used by the Apriori algorithm, as an instance of the
-     * class {@link Configuration}. The configuration may not be null
+     * @return The configuration, which is used by the Apriori algorithm, as an instance of the class {@link
+     * Configuration}. The configuration may not be null
      */
     @NotNull
     public final Configuration getConfiguration() {
@@ -812,34 +903,31 @@ public class Apriori<ItemType extends Item> {
     }
 
     /**
-     * Executes the Apriori algorithm on a specific set of transactions in order to learn
-     * association rules, which specify frequent item sets.
+     * Executes the Apriori algorithm on a specific set of transactions in order to learn association rules, which
+     * specify frequent item sets.
      *
-     * @param iterable An iterable, which allows to iterate the transactions, as an instance of the
-     *                 type {@link Iterable}. The iterable may not be null
-     * @return The rule set, which contains the association rules, which have been learned by the
-     * algorithm, as an instance of the class {@link RuleSet} or an empty rule set, if no
-     * association rules have been learned
+     * @param iterable An iterable, which allows to iterate the transactions, as an instance of the type {@link
+     *                 Iterable}. The iterable may not be null
+     * @return The rule set, which contains the association rules, which have been learned by the algorithm, as an
+     * instance of the class {@link RuleSet} or an empty rule set, if no association rules have been learned
      */
     @NotNull
     public final Output<ItemType> execute(@NotNull final Iterable<Transaction<ItemType>> iterable) {
         ensureNotNull(iterable, "The iterable may not be null");
         LOGGER.info("Starting Apriori algorithm");
         long startTime = System.currentTimeMillis();
-        Map<Integer, TransactionalItemSet<ItemType>> frequentItemSets = frequentItemSetMinerTask
-                .findFrequentItemSets(iterable);
+        Map<Integer, TransactionalItemSet<ItemType>> frequentItemSets =
+                frequentItemSetMinerTask.findFrequentItemSets(iterable);
         RuleSet<ItemType> ruleSet = null;
 
         if (configuration.isGeneratingRules()) {
             ruleSet = associationRuleGeneratorTask.generateAssociationRules(frequentItemSets);
         }
 
-        FrequentItemSets<ItemType> sortedItemSets = new FrequentItemSets<>(
-                Comparator.reverseOrder());
+        FrequentItemSets<ItemType> sortedItemSets = new FrequentItemSets<>(Comparator.reverseOrder());
         frequentItemSets.values().forEach(x -> sortedItemSets.add(new ItemSet<>(x)));
         long endTime = System.currentTimeMillis();
-        Output<ItemType> output = new Output<>(configuration, startTime, endTime, sortedItemSets,
-                ruleSet);
+        Output<ItemType> output = new Output<>(configuration, startTime, endTime, sortedItemSets, ruleSet);
         LOGGER.info("Apriori algorithm terminated after {} milliseconds", output.getRuntime());
         return output;
     }

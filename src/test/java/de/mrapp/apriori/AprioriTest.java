@@ -44,6 +44,8 @@ public class AprioriTest extends AbstractDataTest {
     @Test
     public final void testConfigurationDefaultConstructor() {
         Configuration configuration = new Configuration();
+        assertNull(configuration.getMinStartTime());
+        assertNull(configuration.getMaxEndTime());
         assertEquals(0.0, configuration.getMinSupport());
         assertEquals(1.0, configuration.getMaxSupport());
         assertEquals(0.1, configuration.getSupportDelta());
@@ -174,6 +176,8 @@ public class AprioriTest extends AbstractDataTest {
      */
     @Test
     public final void testClone() {
+        long minStartTime = 10;
+        long maxEndTime = 100;
         double minSupport = 0.3;
         double maxSupport = 0.8;
         double supportDelta = 0.2;
@@ -184,6 +188,8 @@ public class AprioriTest extends AbstractDataTest {
         double confidenceDelta = 0.2;
         int ruleCount = 2;
         Configuration configuration1 = new Configuration();
+        configuration1.setMinStartTime(minStartTime);
+        configuration1.setMaxEndTime(maxEndTime);
         configuration1.setMinSupport(minSupport);
         configuration1.setMaxSupport(maxSupport);
         configuration1.setSupportDelta(supportDelta);
@@ -194,6 +200,8 @@ public class AprioriTest extends AbstractDataTest {
         configuration1.setConfidenceDelta(confidenceDelta);
         configuration1.setRuleCount(ruleCount);
         Configuration configuration2 = configuration1.clone();
+        assertEquals(configuration1.getMinStartTime(), configuration2.getMinStartTime());
+        assertEquals(configuration1.getMaxEndTime(), configuration2.getMaxEndTime());
         assertEquals(configuration1.getMinSupport(), configuration2.getMinSupport());
         assertEquals(configuration1.getMaxSupport(), configuration2.getMaxSupport());
         assertEquals(configuration1.getSupportDelta(), configuration2.getSupportDelta());
@@ -210,6 +218,8 @@ public class AprioriTest extends AbstractDataTest {
      */
     @Test
     public final void testToString() {
+        long minStartTime = 10;
+        long maxEndTime = 100;
         double minSupport = 0.3;
         double maxSupport = 0.8;
         double supportDelta = 0.2;
@@ -220,6 +230,8 @@ public class AprioriTest extends AbstractDataTest {
         double confidenceDelta = 0.2;
         int ruleCount = 2;
         Configuration configuration = new Configuration();
+        configuration.setMinStartTime(minStartTime);
+        configuration.setMaxEndTime(maxEndTime);
         configuration.setMinSupport(minSupport);
         configuration.setMaxSupport(maxSupport);
         configuration.setSupportDelta(supportDelta);
@@ -229,9 +241,11 @@ public class AprioriTest extends AbstractDataTest {
         configuration.setMaxConfidence(maxConfidence);
         configuration.setConfidenceDelta(confidenceDelta);
         configuration.setRuleCount(ruleCount);
-        assertEquals(
-                "[minSupport=" + minSupport + ", maxSupport=" + maxSupport + ", supportDelta=" + supportDelta + ", frequentItemSetCount=" + frequentItemSetCount + ", generateRules=" + generateRules + ", minConfidence=" + minConfidence + ", maxConfidence=" + maxConfidence + ", confidenceDelta=" + confidenceDelta + ", ruleCount=" + ruleCount + "]",
-                configuration.toString());
+        assertEquals("[minStartTime=" + minStartTime + ", maxEndTime=" + maxEndTime + ", minSupport=" + minSupport +
+                ", maxSupport=" + maxSupport + ", supportDelta=" + supportDelta + ", frequentItemSetCount=" +
+                frequentItemSetCount + ", generateRules=" + generateRules + ", minConfidence=" + minConfidence +
+                ", maxConfidence=" + maxConfidence + ", confidenceDelta=" + confidenceDelta + ", ruleCount=" +
+                ruleCount + "]", configuration.toString());
     }
 
     /**
@@ -243,32 +257,46 @@ public class AprioriTest extends AbstractDataTest {
         Configuration configuration2 = new Configuration();
         assertEquals(configuration1.hashCode(), configuration1.hashCode());
         assertEquals(configuration1.hashCode(), configuration2.hashCode());
+        configuration1.setMinStartTime(10L);
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
+        configuration2.setMinStartTime(10L);
+        configuration1.setMinStartTime(20L);
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
+        configuration1.setMinStartTime(null);
+        configuration2.setMinStartTime(null);
+        configuration1.setMaxEndTime(100L);
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
+        configuration2.setMaxEndTime(100L);
+        configuration1.setMaxEndTime(90L);
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
+        configuration1.setMaxEndTime(null);
+        configuration2.setMaxEndTime(null);
         configuration1.setMinSupport(0.6);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setMinSupport(configuration1.getMinSupport());
         configuration1.setMaxSupport(0.9);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setMaxSupport(configuration1.getMaxSupport());
         configuration1.setSupportDelta(0.2);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setSupportDelta(configuration1.getSupportDelta());
         configuration1.setFrequentItemSetCount(2);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setFrequentItemSetCount(configuration1.getFrequentItemSetCount());
         configuration1.setGenerateRules(true);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setGenerateRules(configuration1.isGeneratingRules());
         configuration1.setMinConfidence(0.6);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setMinConfidence(configuration1.getMinConfidence());
         configuration1.setMaxConfidence(0.9);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setMaxConfidence(configuration1.getMaxConfidence());
         configuration1.setConfidenceDelta(0.2);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
         configuration2.setConfidenceDelta(configuration1.getConfidenceDelta());
         configuration1.setRuleCount(2);
-        assertNotSame(configuration1.hashCode(), configuration2.hashCode());
+        assertNotEquals(configuration1.hashCode(), configuration2.hashCode());
     }
 
     /**
@@ -282,6 +310,20 @@ public class AprioriTest extends AbstractDataTest {
         assertFalse(configuration1.equals(new Object()));
         assertTrue(configuration1.equals(configuration1));
         assertTrue(configuration1.equals(configuration2));
+        configuration1.setMinStartTime(10L);
+        assertFalse(configuration1.equals(configuration2));
+        configuration2.setMinStartTime(10L);
+        configuration1.setMinStartTime(20L);
+        assertFalse(configuration1.equals(configuration2));
+        configuration1.setMinStartTime(null);
+        configuration2.setMinStartTime(null);
+        configuration1.setMaxEndTime(100L);
+        assertFalse(configuration1.equals(configuration2));
+        configuration2.setMaxEndTime(100L);
+        configuration1.setMaxEndTime(90L);
+        assertFalse(configuration1.equals(configuration2));
+        configuration1.setMaxEndTime(null);
+        configuration2.setMaxEndTime(null);
         configuration1.setMinSupport(0.6);
         assertFalse(configuration1.equals(configuration2));
         configuration2.setMinSupport(configuration1.getMinSupport());
@@ -320,8 +362,9 @@ public class AprioriTest extends AbstractDataTest {
         double maxSupport = 0.8;
         double supportDelta = 0.2;
         int frequentItemSetCount = 0;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(minSupport).maxSupport(maxSupport).supportDelta(
-                supportDelta).frequentItemSetCount(frequentItemSetCount).create();
+        Apriori<NamedItem> apriori =
+                new Apriori.Builder<NamedItem>(minSupport).maxSupport(maxSupport).supportDelta(supportDelta)
+                        .frequentItemSetCount(frequentItemSetCount).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -340,8 +383,9 @@ public class AprioriTest extends AbstractDataTest {
         double maxSupport = 0.8;
         double supportDelta = 0.2;
         int frequentItemSetCount = 2;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount).minSupport(
-                minSupport).maxSupport(maxSupport).supportDelta(supportDelta).create();
+        Apriori<NamedItem> apriori =
+                new Apriori.Builder<NamedItem>(frequentItemSetCount).minSupport(minSupport).maxSupport(maxSupport)
+                        .supportDelta(supportDelta).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -363,10 +407,10 @@ public class AprioriTest extends AbstractDataTest {
         double maxConfidence = 0.8;
         double confidenceDelta = 0.2;
         int ruleCount = 0;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount).generateRules(
-                minConfidence).minSupport(minSupport).maxSupport(maxSupport).supportDelta(
-                supportDelta).frequentItemSetCount(frequentItemSetCount).maxConfidence(maxConfidence).confidenceDelta(
-                confidenceDelta).ruleCount(ruleCount).create();
+        Apriori<NamedItem> apriori =
+                new Apriori.Builder<NamedItem>(frequentItemSetCount).generateRules(minConfidence).minSupport(minSupport)
+                        .maxSupport(maxSupport).supportDelta(supportDelta).frequentItemSetCount(frequentItemSetCount)
+                        .maxConfidence(maxConfidence).confidenceDelta(confidenceDelta).ruleCount(ruleCount).create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -393,10 +437,11 @@ public class AprioriTest extends AbstractDataTest {
         double maxConfidence = 0.8;
         double confidenceDelta = 0.2;
         int ruleCount = 2;
-        Apriori<NamedItem> apriori = new Apriori.Builder<NamedItem>(frequentItemSetCount).generateRules(
-                ruleCount).minSupport(minSupport).maxSupport(maxSupport).supportDelta(
-                supportDelta).frequentItemSetCount(frequentItemSetCount).minConfidence(minConfidence).maxConfidence(
-                maxConfidence).confidenceDelta(confidenceDelta).create();
+        Apriori<NamedItem> apriori =
+                new Apriori.Builder<NamedItem>(frequentItemSetCount).generateRules(ruleCount).minSupport(minSupport)
+                        .maxSupport(maxSupport).supportDelta(supportDelta).frequentItemSetCount(frequentItemSetCount)
+                        .minConfidence(minConfidence).maxConfidence(maxConfidence).confidenceDelta(confidenceDelta)
+                        .create();
         Configuration configuration = apriori.getConfiguration();
         assertEquals(minSupport, configuration.getMinSupport());
         assertEquals(maxSupport, configuration.getMaxSupport());
@@ -490,15 +535,15 @@ public class AprioriTest extends AbstractDataTest {
         itemSet2.setSupport(0.9);
         map.put(itemSet1.hashCode(), itemSet1);
         map.put(itemSet2.hashCode(), itemSet2);
-        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask = new FrequentItemSetMinerTask<>(configuration,
-                (iterator, minSupport) -> map);
-        AssociationRuleGeneratorTask<NamedItem> associationRuleGeneratorTask = new AssociationRuleGeneratorTask<>(
-                configuration, (frequentItemSets, minConfidence) -> {
-            throw new RuntimeException();
-        });
+        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask =
+                new FrequentItemSetMinerTask<>(configuration, (iterator, minSupport) -> map);
+        AssociationRuleGeneratorTask<NamedItem> associationRuleGeneratorTask =
+                new AssociationRuleGeneratorTask<>(configuration, (frequentItemSets, minConfidence) -> {
+                    throw new RuntimeException();
+                });
         File file = getInputFile(INPUT_FILE_1);
-        Apriori<NamedItem> apriori = new Apriori<>(configuration, frequentItemSetMinerTask,
-                associationRuleGeneratorTask);
+        Apriori<NamedItem> apriori =
+                new Apriori<>(configuration, frequentItemSetMinerTask, associationRuleGeneratorTask);
         Output<NamedItem> output = apriori.execute(() -> new DataIterator(file));
         assertEquals(configuration, output.getConfiguration());
         assertNull(output.getRuleSet());
@@ -534,13 +579,13 @@ public class AprioriTest extends AbstractDataTest {
         RuleSet<NamedItem> ruleSet = new RuleSet<>(null);
         AssociationRule<NamedItem> associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, null);
         ruleSet.add(associationRule);
-        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask = new FrequentItemSetMinerTask<>(configuration,
-                (iterator, minSupport) -> map);
-        AssociationRuleGeneratorTask<NamedItem> associationRuleGeneratorTask = new AssociationRuleGeneratorTask<>(
-                configuration, (frequentItemSets, minConfidence) -> ruleSet);
+        FrequentItemSetMinerTask<NamedItem> frequentItemSetMinerTask =
+                new FrequentItemSetMinerTask<>(configuration, (iterator, minSupport) -> map);
+        AssociationRuleGeneratorTask<NamedItem> associationRuleGeneratorTask =
+                new AssociationRuleGeneratorTask<>(configuration, (frequentItemSets, minConfidence) -> ruleSet);
         File file = getInputFile(INPUT_FILE_1);
-        Apriori<NamedItem> apriori = new Apriori<>(configuration, frequentItemSetMinerTask,
-                associationRuleGeneratorTask);
+        Apriori<NamedItem> apriori =
+                new Apriori<>(configuration, frequentItemSetMinerTask, associationRuleGeneratorTask);
         Output<NamedItem> output = apriori.execute(() -> new DataIterator(file));
         assertEquals(configuration, output.getConfiguration());
         assertEquals(ruleSet, output.getRuleSet());
