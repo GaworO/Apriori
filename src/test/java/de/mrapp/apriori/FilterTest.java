@@ -312,4 +312,80 @@ public class FilterTest {
         Filter.forAssociationRules().byHeadSize(3, 2);
     }
 
+    @Test
+    public final void testFilterForTimeIntervalWithNoStartAndEndTime() {
+        ItemSet<NamedItem> body = new ItemSet<>();
+        body.add(new NamedItem("a"));
+        ItemSet<NamedItem> head = new ItemSet<>();
+        head.add(new NamedItem("b"));
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
+        Filter<AssociationRule> filter = Filter.forAssociationRules().byTimeInterval(null, null);
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 100));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(30, 70));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(40, 100));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 60));
+        assertTrue(filter.test(associationRule));
+    }
+
+    @Test
+    public final void testFilterForTimeIntervalWithStartAndEndTime() {
+        ItemSet<NamedItem> body = new ItemSet<>();
+        body.add(new NamedItem("a"));
+        ItemSet<NamedItem> head = new ItemSet<>();
+        head.add(new NamedItem("b"));
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
+        Filter<AssociationRule> filter = Filter.forAssociationRules().byTimeInterval(30L, 70L);
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 100));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(30, 70));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(40, 100));
+        assertFalse(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 60));
+        assertFalse(filter.test(associationRule));
+    }
+
+    @Test
+    public final void testFilterForTimeIntervalWithStartTime() {
+        ItemSet<NamedItem> body = new ItemSet<>();
+        body.add(new NamedItem("a"));
+        ItemSet<NamedItem> head = new ItemSet<>();
+        head.add(new NamedItem("b"));
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
+        Filter<AssociationRule> filter = Filter.forAssociationRules().byTimeInterval(30L, null);
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 100));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(30, 70));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(40, 100));
+        assertFalse(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 60));
+        assertTrue(filter.test(associationRule));
+    }
+
+    @Test
+    public final void testFilterForTimeIntervalWithEndTime() {
+        ItemSet<NamedItem> body = new ItemSet<>();
+        body.add(new NamedItem("a"));
+        ItemSet<NamedItem> head = new ItemSet<>();
+        head.add(new NamedItem("b"));
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(body, head, 0.5, null);
+        Filter<AssociationRule> filter = Filter.forAssociationRules().byTimeInterval(null, 70L);
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 100));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(30, 70));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(40, 100));
+        assertTrue(filter.test(associationRule));
+        associationRule = new AssociationRule<>(body, head, 0.5, new TimeInterval(10, 60));
+        assertFalse(filter.test(associationRule));
+    }
+
 }
