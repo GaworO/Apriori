@@ -89,8 +89,8 @@ public class AssociationRuleTest {
      */
     @Test
     public final void testCoversWithArrayParameter() {
-        NamedItem[] items = {new NamedItem("a"), new NamedItem("c"), new NamedItem("d"), new NamedItem(
-                "e"), new NamedItem("f")};
+        NamedItem[] items =
+                {new NamedItem("a"), new NamedItem("c"), new NamedItem("d"), new NamedItem("e"), new NamedItem("f")};
         ItemSet<NamedItem> body = new ItemSet<>();
         body.add(new NamedItem("a"));
         body.add(new NamedItem("b"));
@@ -192,6 +192,44 @@ public class AssociationRuleTest {
         assertTrue(associationRule.isValidAt(50));
         assertTrue(associationRule.isValidAt(100));
         assertFalse(associationRule.isValidAt(101));
+    }
+
+    @Test
+    public final void testIsValidAtWithStartTime() {
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, null);
+        assertTrue(associationRule.isValidAt(9L, null));
+        associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, new TimeInterval(10, 100));
+        assertFalse(associationRule.isValidAt(9L, null));
+        assertTrue(associationRule.isValidAt(10L, null));
+        assertTrue(associationRule.isValidAt(50L, null));
+        assertTrue(associationRule.isValidAt(100L, null));
+        assertFalse(associationRule.isValidAt(101L, null));
+    }
+
+    @Test
+    public final void testIsValidAtWithEndTime() {
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, null);
+        assertTrue(associationRule.isValidAt(null, 9L));
+        associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, new TimeInterval(10, 100));
+        assertFalse(associationRule.isValidAt(null, 9L));
+        assertTrue(associationRule.isValidAt(null, 10L));
+        assertTrue(associationRule.isValidAt(null, 50L));
+        assertTrue(associationRule.isValidAt(null, 100L));
+        assertFalse(associationRule.isValidAt(null, 101L));
+    }
+
+    @Test
+    public final void testIsValidAtWithStartAndEndTime() {
+        AssociationRule<NamedItem> associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, null);
+        assertTrue(associationRule.isValidAt(9L, 50L));
+        associationRule = new AssociationRule<>(new ItemSet<>(), new ItemSet<>(), 0.5, new TimeInterval(10, 100));
+        assertFalse(associationRule.isValidAt(9L, 50L));
+        assertTrue(associationRule.isValidAt(10L, 50L));
+        assertTrue(associationRule.isValidAt(50L, 70L));
+        assertTrue(associationRule.isValidAt(50L, 100L));
+        assertFalse(associationRule.isValidAt(50L, 101L));
+        assertFalse(associationRule.isValidAt(9L, 101L));
+        assertTrue(associationRule.isValidAt(10L, 100L));
     }
 
     @Test

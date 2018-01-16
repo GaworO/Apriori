@@ -132,11 +132,25 @@ public class AssociationRule<ItemType extends Item> implements Comparable<Associ
      * Returns, whether the association rule is valid at a specific moment in time, or not.
      *
      * @param timestamp The timestamp, which specifies the moment in time to be checked, as a {@link Long} value
-     * @return True, if the association rule is valid at the given moment in time, false otherwise or if the association
-     * rule is not temporal
+     * @return True, if the association rule is valid at the given moment in time, false otherwise
      */
     public final boolean isValidAt(final long timestamp) {
-        return !isTemporal() || timeInterval.includes(timestamp);
+        return isValidAt(timestamp, timestamp);
+    }
+
+    /**
+     * Returns, whether the association rule is valid during a specific time interval, or not.
+     *
+     * @param start The start time of the interval as a {@link Long} value or null, if the start of the interval should
+     *              not be restricted
+     * @param end   The end time of the interval as a {@link Long} value or null, if the end of the interval should not
+     *              be restricted
+     * @return True, if the association rule is valid during the given time interval, false otherwise
+     */
+    public final boolean isValidAt(@Nullable final Long start, @Nullable final Long end) {
+        return !isTemporal() ||
+                ((start == null || (timeInterval.getStart() <= start && timeInterval.getEnd() >= start)) &&
+                        (end == null || (timeInterval.getEnd() >= end && timeInterval.getStart() <= end)));
     }
 
     /**

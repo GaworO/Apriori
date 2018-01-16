@@ -306,6 +306,17 @@ public abstract class Filter<T> implements Predicate<T> {
         }
 
         /**
+         * Sets the timestamp at which an association rule must be valid to be accepted by the filter.
+         *
+         * @param timestamp The timestamp as a {@link Long} value
+         * @return The filter, this method has been called upon, as an instance of the class {@link
+         * AssociationRuleFilter}. The filter may not be null
+         */
+        public final AssociationRuleFilter byTime(final long timestamp) {
+            return new AssociationRuleFilter(this, x -> x.isValidAt(timestamp));
+        }
+
+        /**
          * Sets the start and end time of the time interval, an association rule must be valid for to be accepted by the
          * filter.
          *
@@ -317,10 +328,8 @@ public abstract class Filter<T> implements Predicate<T> {
          * AssociationRuleFilter}. The filter may not be null
          */
         @NotNull
-        public final AssociationRuleFilter byTimeInterval(@Nullable final Long start, @Nullable final Long end) {
-            return new AssociationRuleFilter(this, x -> !x.isTemporal() ||
-                    ((start == null || x.getTimeInterval().getStart() <= start) &&
-                            (end == null || x.getTimeInterval().getEnd() >= end)));
+        public final AssociationRuleFilter byTime(@Nullable final Long start, @Nullable final Long end) {
+            return new AssociationRuleFilter(this, x -> x.isValidAt(start, end));
         }
 
         @Override
