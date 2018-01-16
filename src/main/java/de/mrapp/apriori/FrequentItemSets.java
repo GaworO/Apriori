@@ -35,9 +35,8 @@ import static de.mrapp.util.Condition.ensureNotNull;
  * @author Michael Rapp
  * @since 1.2.0
  */
-public class FrequentItemSets<ItemType extends Item> extends
-        SortedArraySet<ItemSet<ItemType>> implements Sortable<FrequentItemSets<ItemType>, ItemSet>,
-        Filterable<FrequentItemSets<ItemType>, ItemSet>, Serializable, Cloneable {
+public class FrequentItemSets<ItemType extends Item> extends SortedArraySet<ItemSet<ItemType>>
+        implements Sortable<FrequentItemSets<ItemType>, ItemSet>, Filterable<FrequentItemSets<ItemType>, ItemSet>, Serializable, Cloneable {
 
     /**
      * The constant serial version UID.
@@ -47,9 +46,8 @@ public class FrequentItemSets<ItemType extends Item> extends
     /**
      * Creates a new sorted set, which contains frequent item sets.
      *
-     * @param comparator The comparator, which should be used to sort the set, as as an instance of
-     *                   the type {@link Comparator} or null, if the natural ordering should be
-     *                   used
+     * @param comparator The comparator, which should be used to sort the set, as as an instance of the type {@link
+     *                   Comparator} or null, if the natural ordering should be used
      */
     public FrequentItemSets(@Nullable final Comparator<? super ItemSet<ItemType>> comparator) {
         super(comparator);
@@ -58,12 +56,11 @@ public class FrequentItemSets<ItemType extends Item> extends
     /**
      * Creates a new sorted set, which contains frequent item sets.
      *
-     * @param itemSets   A collection, which contains the item sets, which should be added to the
-     *                   sorted set, as an instance of the class {@link Collection} or an empty
-     *                   collection, if no item sets should be added
-     * @param comparator The comparator, which should be used to sort the set, as as an instance of
-     *                   the type {@link Comparator} or null, if the natural ordering should be
-     *                   used
+     * @param itemSets   A collection, which contains the item sets, which should be added to the sorted set, as an
+     *                   instance of the class {@link Collection} or an empty collection, if no item sets should be
+     *                   added
+     * @param comparator The comparator, which should be used to sort the set, as as an instance of the type {@link
+     *                   Comparator} or null, if the natural ordering should be used
      */
     public FrequentItemSets(@NotNull final Collection<ItemSet<ItemType>> itemSets,
                             @Nullable final Comparator<? super ItemSet<ItemType>> comparator) {
@@ -71,19 +68,17 @@ public class FrequentItemSets<ItemType extends Item> extends
     }
 
     /**
-     * Creates and returns a string, which contains information about the frequent item set, which
-     * have been found by the algorithm.
+     * Creates and returns a string, which contains information about the frequent item set, which have been found by
+     * the algorithm.
      *
      * @param <T>              The type of the items, which are contained by the item sets
-     * @param frequentItemSets A collection, which contains the frequent item sets, as an instance
-     *                         of the type {@link Collection} or null, if no frequent item sets have
-     *                         been found by the algorithm
-     * @return A string, which contains information about the given frequent item sets, as a {@link
-     * String}. The string may neither be null, nor empty
+     * @param frequentItemSets A collection, which contains the frequent item sets, as an instance of the type {@link
+     *                         Collection} or null, if no frequent item sets have been found by the algorithm
+     * @return A string, which contains information about the given frequent item sets, as a {@link String}. The string
+     * may neither be null, nor empty
      */
     @NotNull
-    public static <T> String formatFrequentItemSets(
-            @NotNull final Collection<? extends ItemSet<T>> frequentItemSets) {
+    public static <T> String formatFrequentItemSets(@NotNull final Collection<? extends ItemSet<T>> frequentItemSets) {
         ensureNotNull(frequentItemSets, "The collection may not be null");
         StringBuilder stringBuilder = new StringBuilder();
         DecimalFormat decimalFormat = new DecimalFormat();
@@ -111,7 +106,7 @@ public class FrequentItemSets<ItemType extends Item> extends
     @NotNull
     @Override
     public final FrequentItemSets<ItemType> sort(@Nullable final Comparator<ItemSet> comparator) {
-        return new FrequentItemSets<ItemType>(this, comparator);
+        return new FrequentItemSets<>(this, comparator);
     }
 
     @NotNull
