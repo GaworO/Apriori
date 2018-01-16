@@ -30,7 +30,7 @@ public class TimeInterval implements Serializable, Cloneable {
     /**
      * The constant serial version UID.
      */
-    private static final long serialVersionUID = 3002597429386125047L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The start timestamp.
@@ -89,6 +89,16 @@ public class TimeInterval implements Serializable, Cloneable {
      */
     public final long getDuration() {
         return end - start;
+    }
+
+    /**
+     * Returns, whether the interval includes a specific timestamp, or not.
+     *
+     * @param timestamp The timestamp, which should be checked, as a {@link Long} value
+     * @return True, if interval includes the given timestamp, false otherwise
+     */
+    public final boolean includes(final long timestamp) {
+        return start <= timestamp && timestamp <= end;
     }
 
     @Override

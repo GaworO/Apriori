@@ -49,6 +49,16 @@ public class TimeIntervalTest {
     }
 
     @Test
+    public final void testIncludes() {
+        TimeInterval timeInterval = new TimeInterval(10, 100);
+        assertFalse(timeInterval.includes(9));
+        assertTrue(timeInterval.includes(10));
+        assertTrue(timeInterval.includes(50));
+        assertTrue(timeInterval.includes(100));
+        assertFalse(timeInterval.includes(101));
+    }
+
+    @Test
     public final void testClone() {
         long start = 10;
         long end = 100;
